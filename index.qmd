@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロジェクトの概要</title>
+</head>
+<body>
+    <h1>プロジェクトの概要</h1>
+    <p>このプロジェクトでは、さまざまなテーマについての情報を提供します。</p>
+    <ul>
+        <li><a href="about.html">プロジェクトについて</a></li>
+        <li><a href="methodology.html">方法論</a></li>
+        <li><a href="results.html">結果</a></li>
+    </ul>
+</body>
+</html>
