@@ -1,23 +1,33 @@
 ---
-title: "My Homepage"
-author: "Your Name"
-format: html
+title: "サンプル QMD ドキュメント"
+author: "あなたの名前"
+date: "2024-09-28"
+format: 
+  html: 
+    toc: true
+    number-sections: true
+  pdf: default
 ---
 
-# Welcome to My Homepage
+# はじめに
 
-This is a simple homepage created with Quarto.
+この文書は、Quartoを使用して作成されたサンプルのQMDファイルです。GitHubで公開するための基本的な構造を示します。
 
-## About Me
+## セクション1
 
-Write something about yourself here.
+ここに文章を書きます。Quartoでは、Markdown形式で書くことができ、見出しやリスト、リンクなどを簡単に追加できます。
 
-## My Projects
+### リストの例
 
-- Project 1
-- Project 2
-- Project 3
+- アイテム1
+- アイテム2
+- アイテム3
 
-## Contact
+## セクション2: コードチャンク
 
-You can contact me at [email@example.com](mailto:email@example.com).
+次に、Rのコードチャンクの例を示します。QuartoはR、Python、Juliaなどのコードを埋め込むことができます。
+
+```{r}
+# Rでの計算例
+x <- rnorm(100)
+mean(x)
