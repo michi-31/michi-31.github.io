@@ -1,0 +1,23 @@
+---
+title: "My Homepage"
+author: "Your Name"
+format: html
+---
+
+# Welcome to My Homepage
+
+This is a simple homepage created with Quarto.
+
+## About Me
+
+Write something about yourself here.
+
+## My Projects
+
+- Project 1
+- Project 2
+- Project 3
+
+## Contact
+
+You can contact me at [email@example.com](mailto:email@example.com).
