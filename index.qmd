@@ -1,17 +1,54 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>プロジェクトの概要</title>
-</head>
-<body>
-    <h1>プロジェクトの概要</h1>
-    <p>このプロジェクトでは、さまざまなテーマについての情報を提供します。</p>
-    <ul>
-        <li><a href="about.html">プロジェクトについて</a></li>
-        <li><a href="methodology.html">方法論</a></li>
-        <li><a href="results.html">結果</a></li>
-    </ul>
-</body>
-</html>
+---
+title: "R、Pythonを用いた統計分析等について"
+date: "2024-09-27"
+execute: 
+  cache: true
+format:
+  html: 
+    slide-level: 2
+    toc: true
+---
+
+# 概要
+
+ここでは、R、Pythonを用いた統計分析や経済学の知識、コード管理の手法としてのGitHubの基本的な使い方を整理します。
+
+# 目次
+
+1. [GitHub](#1-github)
+2. [R](#2-r)
+3. [Python](#3-python)
+4. [計量経済学](#4-けいりょうけいざいがく)
+5. [データサイエンス](#5-datasaience)
+6. [その他](#6-その他)
+
+## 1. GitHub {#1-github}
+
+ここでは、GitHubの基本的な使い方を整理します。  
+[GitHubについて](git_memo.html)
+
+## 2. R {#2-r}
+
+ここでは、Rの基本的な使い方を整理します。  
+[Rについて](section1.qmd)
+
+## 3. Python {#3-python}
+
+ここでは、Pythonの基本的な使い方を整理します。  
+[Pythonについて](section1.qmd)
+
+## 4. 計量経済学 {#4-けいりょうけいざいがく}
+
+ここでは、計量経済学の基本的な知識を整理します。  
+[計量経済学について](section1.qmd)
+
+## 5. データサイエンス {#5-datasaience}
+
+ここでは、データサイエンスの基本的な知識を整理します。  
+[データサイエンスについて](section1.qmd)
+
+## 6. その他 {#6-その他}
+
+その他、関連知識を整理します。  
+- 応用一般均衡モデル  
+[応用一般均衡モデルについて](section1.qmd)
