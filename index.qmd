@@ -1,6 +1,6 @@
 ---
 title: "R、Pythonを用いた統計分析等について"
-date: "2024-09-27"
+date: "2024-09-"
 execute: 
   cache: true
 format:
@@ -18,8 +18,8 @@ format:
 1. [GitHub](#1-github)
 2. [R](#2-r)
 3. [Python](#3-python)
-4. [計量経済学](#4-けいりょうけいざいがく)
-5. [データサイエンス](#5-datasaience)
+4. [計量経済学](#4-計量経済学)
+5. [データサイエンス](#5-データサイエンス)
 6. [その他](#6-その他)
 
 ## 1. GitHub {#1-github}
@@ -30,7 +30,7 @@ format:
 ## 2. R {#2-r}
 
 ここでは、Rの基本的な使い方を整理します。  
-[Rについて](section1.qmd)
+[1.データの可視化](1.データの可視化.html)
 
 ## 3. Python {#3-python}
 
