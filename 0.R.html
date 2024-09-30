@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-09-01">
+<meta name="dcterms.date" content="2024-09-30">
 
-<title>R、Pythonを用いた統計分析等について</title>
+<title>0.R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,16 +24,16 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="index_files/libs/clipboard/clipboard.min.js"></script>
-<script src="index_files/libs/quarto-html/quarto.js"></script>
-<script src="index_files/libs/quarto-html/popper.min.js"></script>
-<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="index_files/libs/quarto-html/anchor.min.js"></script>
-<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="0.R_files/libs/clipboard/clipboard.min.js"></script>
+<script src="0.R_files/libs/quarto-html/quarto.js"></script>
+<script src="0.R_files/libs/quarto-html/popper.min.js"></script>
+<script src="0.R_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="0.R_files/libs/quarto-html/anchor.min.js"></script>
+<link href="0.R_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="0.R_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="0.R_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="0.R_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="0.R_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -46,16 +46,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#概要" id="toc-概要" class="nav-link active" data-scroll-target="#概要">概要</a></li>
-  <li><a href="#目次" id="toc-目次" class="nav-link" data-scroll-target="#目次">目次</a>
+  <li><a href="#目的" id="toc-目的" class="nav-link active" data-scroll-target="#目的">目的</a></li>
+  <li><a href="#r言語とは" id="toc-r言語とは" class="nav-link" data-scroll-target="#r言語とは">1.R言語とは</a></li>
+  <li><a href="#r言語でできること" id="toc-r言語でできること" class="nav-link" data-scroll-target="#r言語でできること">2.R言語でできること</a></li>
+  <li><a href="#他の言語との違い" id="toc-他の言語との違い" class="nav-link" data-scroll-target="#他の言語との違い">3.他の言語との違い</a></li>
+  <li><a href="#rとrstudio" id="toc-rとrstudio" class="nav-link" data-scroll-target="#rとrstudio">4.RとRStudio</a>
   <ul class="collapse">
-  <li><a href="#1-github" id="toc-1-github" class="nav-link" data-scroll-target="#1-github">1. GitHub</a></li>
-  <li><a href="#2-r" id="toc-2-r" class="nav-link" data-scroll-target="#2-r">2. R</a></li>
-  <li><a href="#3-python" id="toc-3-python" class="nav-link" data-scroll-target="#3-python">3. Python</a></li>
-  <li><a href="#4-計量経済学" id="toc-4-計量経済学" class="nav-link" data-scroll-target="#4-計量経済学">4. 計量経済学</a></li>
-  <li><a href="#5-データサイエンス" id="toc-5-データサイエンス" class="nav-link" data-scroll-target="#5-データサイエンス">5. データサイエンス</a></li>
-  <li><a href="#6-その他" id="toc-6-その他" class="nav-link" data-scroll-target="#6-その他">6. その他</a></li>
+  <li><a href="#r" id="toc-r" class="nav-link" data-scroll-target="#r">R</a></li>
+  <li><a href="#rstudio" id="toc-rstudio" class="nav-link" data-scroll-target="#rstudio">RStudio</a></li>
   </ul></li>
+  <li><a href="#参考" id="toc-参考" class="nav-link" data-scroll-target="#参考">参考</a></li>
   </ul>
 </nav>
 </div>
@@ -63,7 +63,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">R、Pythonを用いた統計分析等について</h1>
+<h1 class="title">0.R</h1>
 </div>
 
 
@@ -74,7 +74,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 1, 2024</p>
+      <p class="date">September 30, 2024</p>
     </div>
   </div>
   
@@ -86,66 +86,62 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="概要" class="level1">
-<h1>概要</h1>
-<p>ここでは、R、Pythonを用いた統計分析や経済学の知識、コード管理の手法としてのGitHubの基本的な使い方を整理します。</p>
+<section id="目的" class="level1">
+<h1>目的</h1>
+<p>R言語について整理します。</p>
 </section>
-<section id="目次" class="level1">
-<h1>目次</h1>
-<ol type="1">
-<li><a href="#1-github">GitHub</a></li>
-<li><a href="#2-r">R</a></li>
-<li><a href="#3-python">Python</a></li>
-<li><a href="#4-計量経済学">計量経済学</a></li>
-<li><a href="#5-データサイエンス">データサイエンス</a></li>
-<li><a href="#6-その他">その他</a></li>
-</ol>
-<section id="1-github" class="level2">
-<h2 class="anchored" data-anchor-id="1-github">1. GitHub</h2>
-<p>GitHubの基本的な使い方を整理します。</p>
+<section id="r言語とは" class="level1">
+<h1>1.R言語とは</h1>
+<p>Rは、統計解析とデータ分析に特化したオープンソースのプログラミング言語で、1990年代にニュージーランドのオークランド大学で開発されました。</p>
+<p>無料で利用でき、豊富な統計解析用パッケージが用意されています。</p>
+</section>
+<section id="r言語でできること" class="level1">
+<h1>2.R言語でできること</h1>
 <ul>
-<li><a href="git_memo.html">GitHubについて</a></li>
+<li><p>統計解析:<br>
+各種の統計手法や検定を簡単に実行できます。回帰分析や分散分析など、多岐にわたる手法がサポートされています。</p></li>
+<li><p>データ可視化:<br>
+ggplot2や latticeなどのパッケージを使って、美しいグラフやチャートを作成できます。データの理解を助けるための視覚化が容易です。</p></li>
+<li><p>機械学習:<br>
+caretや randomForestなどのライブラリを活用して、分類、回帰、クラスタリングなどの機械学習アルゴリズムを実装できます。</p></li>
+<li><p>テキストマイニング:<br>
+自然言語処理の技術を用いて、テキストデータの分析や可視化が行えます。</p></li>
+<li><p>金融分析:<br>
+リスクモデリングやポートフォリオ管理のための分析が可能で、金融データの取り扱いに特化したパッケージも豊富です。</p></li>
 </ul>
 </section>
-<section id="2-r" class="level2">
-<h2 class="anchored" data-anchor-id="2-r">2. R</h2>
-<p>Rの基本的な使い方を整理します。</p>
+<section id="他の言語との違い" class="level1">
+<h1>3.他の言語との違い</h1>
 <ul>
-<li><a href="0.R.html">0.R</a></li>
-<li><a href="1.データの可視化.html">1.データの可視化</a></li>
-<li><a href="2.基本.html">2.基本</a></li>
-<li><a href="3.データ変換.html">3.データ変換</a></li>
+<li><p>統計解析に特化:<br>
+Rは統計解析のために設計された言語であり、豊富な統計パッケージが存在します。一方、PythonやMATLABなども統計解析が可能ですが、Rの方が専門性が高いです。</p></li>
+<li><p>データ可視化の強さ:<br>
+Rの可視化ライブラリは非常に強力で、多彩なグラフを簡単に作成できます。特にggplot2は高い人気を誇ります。PythonのMatplotlibやSeabornも優れていますが、Rは直感的な文法を持っています。</p></li>
+<li><p>大規模データの扱い:<br>
+Rは大規模データを扱う際の処理速度が他の言語に比べて遅いことがあります。PythonやJavaなどは効率的なデータ処理に優れています。</p></li>
+<li><p>オープンソースコミュニティ:<br>
+Rは活発なオープンソースコミュニティが存在し、多くのユーザーによってパッケージが作成・維持されています。他の言語でもコミュニティはありますが、Rの統計分野に特化したものは特に強力です。</p></li>
 </ul>
 </section>
-<section id="3-python" class="level2">
-<h2 class="anchored" data-anchor-id="3-python">3. Python</h2>
-<p>Pythonの基本的な使い方を整理します。</p>
-<ul>
-<li><a href="section1.html">Pythonについて</a></li>
-</ul>
+<section id="rとrstudio" class="level1">
+<h1>4.RとRStudio</h1>
+<section id="r" class="level3">
+<h3 class="anchored" data-anchor-id="r">R</h3>
+<p>RはCRAN（Comprehensive R Archive Network）からダウンロードできます。</p>
+<p><a href="https://cloud.r-project.org/">CRANからダウンロード</a></p>
 </section>
-<section id="4-計量経済学" class="level2">
-<h2 class="anchored" data-anchor-id="4-計量経済学">4. 計量経済学</h2>
-<p>計量経済学の基本的な知識を整理します。</p>
-<ul>
-<li><a href="section1.html">計量経済学について</a></li>
-</ul>
+<section id="rstudio" class="level3">
+<h3 class="anchored" data-anchor-id="rstudio">RStudio</h3>
+<p>RStudioは、Rをより快適に使用するための統合開発環境（IDE）です。公式サイトからダウンロードできます。</p>
+<p><a href="https://posit.co/downloads/">RStudioのダウンロード</a></p>
 </section>
-<section id="5-データサイエンス" class="level2">
-<h2 class="anchored" data-anchor-id="5-データサイエンス">5. データサイエンス</h2>
-<p>データサイエンスの基本的な知識を整理します。</p>
-<ul>
-<li><a href="section1.html">データサイエンスについて</a></li>
-</ul>
 </section>
-<section id="6-その他" class="level2">
-<h2 class="anchored" data-anchor-id="6-その他">6. その他</h2>
-<p>その他、関連知識を整理します。</p>
+<section id="参考" class="level1">
+<h1>参考</h1>
 <ul>
-<li><a href="shortcut.html">VS Codeショートカット一覧</a></li>
-<li><a href="section1.html">応用一般均衡モデルについて</a></li>
+<li><a href="https://products.sint.co.jp/topsic/blog/r-language-overview">R言語とは？何ができる言語なのか、Pythonとの違いについても解説</a></li>
+<li><a href="https://zenn.dev/masayukeeeee/articles/96c7832de4dc40">【初心者向け】RとRStudioのダウンロード・インストール 2023年10月版</a></li>
 </ul>
-</section>
 </section>
 
 </main>
