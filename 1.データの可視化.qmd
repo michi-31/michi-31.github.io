@@ -31,13 +31,15 @@ library(ggthemes)
 
 # 2.第１ステップ
 ### データフレームの確認
-以下の関数を用いて、データフレームの内容を確認します。
+glimpse()関数を用いることで、データフレームの変数と先頭のいくつかのデータを確認できます。
 
-- glimpse(): 全ての変数と各変数の最初のいくつかの観測地を表示
-- View(): スクロールやフィルタリングができるインタラクティブなデータビューアを表示
 ```{r}
 glimpse(penguins)
-#View(penguins)
+```
+
+また、View()関数でスクロールやフィルタリングができるインタラクティブなビュアーを表示することができます。
+```markdown
+View(penguins)
 ```
 
 ### ggplot2の組み立て
@@ -73,7 +75,7 @@ ggplot(
 ) + 
   geom_point() # 散布図を設定
 ```
-aes()関数内のエステティックマッピングにcolor = speciesを追加してペンギンの種類ごとの色分けを行います。
+aes()関数内のエステティックマッピングにcolor引数を設定して、ペンギンの種類ごとの色分けを行います。
 ```{r}
 ggplot(
   data = penguins,
@@ -85,7 +87,7 @@ ggplot(
 ```
 
 ### ペンギンの種類ごとに直線を引く
-散布図にもう一つレイヤを追加して体重とフリッパーの関係を示す滑らかなカーブを設定します。
+散布図にレイヤを追加して体重とフリッパーの関係を示す直線を引きます。
 ```{r}
 ggplot(
   data = penguins,
@@ -98,7 +100,7 @@ ggplot(
 ```
 
 ### ラベルの改善
-colorに加えてshapeをエステティックにマッピングして、ペンギンの種類ごと異なる形を使用します。  
+aes()関数内のエステティックマッピングにshape引数を設定して、ペンギンの種類ごと異なる形を使用します。  
 
 また、labs()関数でプロットラベルにタイトルなどを指定し、scale_color_colorblind()関数でカラーパレットを色覚異常に対応した改善を行います。
 ```{r}
@@ -118,21 +120,20 @@ ggplot(
 ```
 
 # 練習問題
-### 1.penguinsの行列を求める
-344行、８列
+### 1.penguinsの行列数
+glimpse()関数を用いることで、344行、８列のデータセットであることがわかります。
 ```{r}
 glimpse(penguins)
 ```
-### 2.bill_depth_mmの意味を調べる
-Culmen Depth  
-a number denoting the depth of the dorsal ridge of a bird's bill (millimeters)  
-→くちばしの深さ
-```{r}
-#??penguins
+### 2.bill_depth_mmの意味
+??<データセット名>でデータセットの内容を調べることができます。  
+bill_depth_mmは、「くちばしの深さ」を意味します。
+```markdown
+??penguins
 ```
-### 3.bill_depth_mmとbill_length_mmの散布図を作成
-くちばしの長さと深さは種類によって異なる傾向がある。全体としては、くちばしの深さが増加すると長さが減少する負の相関関係が見れれる。  
-これは、ペンギンの種が異なる環境や食性に応じて異なる形態的特徴を持っていることを反映している可能性が考えられる。
+### 3.bill_depth_mmとbill_length_mmの散布図
+散布図より、全体として、くちばしの深さが増加すると長さが減少する関係が見られます。  
+また、ペンギンの種類を色分けすることで、両者の関係は種類で異なる傾向がありることがわかります。  
 ```{r}
 ggplot(penguins, aes(x = bill_length_mm,
                      y = bill_depth_mm)) +
@@ -145,30 +146,41 @@ ggplot(penguins, aes(x = bill_length_mm,
   ) + 
   scale_color_colorblind()
 ```
-### 4.speciesとbill_depth_mmの散布図を作成
-くちばしの深さの中央値は種類ごと異なる。AdelleとChinstrapに比べてGentooが短い傾向がある。
+### 4.speciesとbill_depth_mmの散布図
+くちばしの深さの中央値は、種類ごと異なります。  
+AdelleとChinstrapに比べてGentooが短い傾向があります。
 ```{r}
 ggplot(penguins, aes(x = species, y = bill_depth_mm)) +
   geom_boxplot() +  
   labs(title = "Species and Bill depth",
        x = "Species", y = "Bill depth(mm)")  
 ```
-### 5.エラー解析
-ggplot()のmapping引数でx,y軸が定義されていないため、散布図が作成できず、エラーが生じる。
+### 5.エラー修正
+以下のコードがエラーになる原因は、ggplot()でmapping引数が定義されていないためです。
+```markdown
 ggplot(data = penguins) +  
  geom_point()
+```
+mapping引数を定義することで散布図を表示することができます。
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  ) + 
+ geom_point()
+```
+### 6.geom_point()のna.rm引数
+na.rm引数のデフォルト値はFALSEです。欠損値（NA）があるとプロットに反映されず、エラーが発生します。  
 
-### 6.geom_point()の引数na.rmの意味と挙動
-- na.rm = FALSE（デフォルト）:  
-欠損値がある場合、プロットがエラーになる。例えば、x または y のいずれかに NA が含まれていると、データが描画されない。
-- na.rm = TRUE:  
-欠損値を無視し、プロットを生成する。この場合、NA のデータポイントは除外され、他のデータポイントのみが描画される。
+TRUEを指定することで欠損値を無視し、プロットを生成することができます。この場合、NAを含む行はプロットから除外されるため、残りのデータのみが描画されます。
 ```{r}
 # NAを含むデータを使った散布図
 ggplot(penguins, aes(x = flipper_length_mm,　　　　　　　　　　　 y = body_mass_g)) +
   geom_point(na.rm = TRUE)  # NAを無視してプロット
 ```
 ### 7.キャプションの追加
+キャプションとは、画像やグラフ、表などのコンテンツに付けられる説明文やタイトルのことです。  
+キャプションは、視覚的な要素の内容を補足し、理解を深める役割を果たします。
 ```{r}
 ggplot(penguins, aes(x = flipper_length_mm,
 　　　　　　　　　　　 y = body_mass_g)) +
@@ -178,7 +190,9 @@ ggplot(penguins, aes(x = flipper_length_mm,
   )
 ```
 
-### 8.グラフの作成
+### 8.設例と同じグラフの作成
+以下のコードを実行することで、設例と同じグラフを作成することができます。  
+method引数に"loess"を指定することで、散布図のデータに対して滑らかな曲線をフィットさせることができます。
 ```{r}
 ggplot(penguins, aes(x = flipper_length_mm,
                      y = body_mass_g)) + 
@@ -187,11 +201,8 @@ ggplot(penguins, aes(x = flipper_length_mm,
 ```
 
 ### 9.コードの出力予測
-- se = TRUE（デフォルト）:  
-スムージング線の周りに、信頼区間を示すバンドが描画される。これにより、モデルの不確実性を視覚的に理解しやすくなる。
-
-- se = FALSE:  
-信頼区間を描画せず、スムージング線のみを表示する。これにより、グラフがすっきりとし、視覚的に簡潔になるが、モデルの不確実性に関する情報は失われる。
+geom_smooth()関数内でse引数をFALSEにすることで、直線の信頼区間を描画せず、スムージング線のみを表示します。  
+これにより、グラフがすっきりとし、視覚的に簡潔になりますが、モデルの不確実性に関する情報は失われます。
 ```{r}
 ggplot(penguins, aes(x = flipper_length_mm,
                      y = body_mass_g,
@@ -200,24 +211,34 @@ ggplot(penguins, aes(x = flipper_length_mm,
   geom_smooth(se = FALSE)
 ```
 ### 10.実行結果の説明
-エステティックマッピングの定義域が異なるだけで、結果は同じになる。
-
-
-# 3.ggplot2の呼び出し
-- ggplot2の最初の２つの引数はdataとmapping。
+エステティックマッピングの定義域が異なるだけで、結果は同じになります。
 ```{r}
 ggplot(
   data = penguins,
   mapping = aes(x = flipper_length_mm, y = body_mass_g)
 ) + 
-  geom_point()
+  geom_point() + 
+  geom_smooth()
 ```
-- 省略して簡潔に書き直す。
+```{r}
+ggplot() +
+  geom_point(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)
+  ) + 
+  geom_smooth(
+    data = penguins,
+    mapping = aes(x = flipper_length_mm, y = body_mass_g)  
+    )
+```
+
+# 3.ggplot2の呼び出し
+ggplot2の最初の２つの引数はdataとmappingですが、これらの表記を省略して簡潔に書くことができます。
 ```{r}
 ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) + 
   geom_point()
 ```
-- パイプ|>を使って書き直す。
+また、パイプ|>を用いると、以下のように書き直すことができます。
 ```{r}
 penguins |>
  ggplot(aes(x = flipper_length_mm, y = body_mass_g)) + 
@@ -227,21 +248,21 @@ penguins |>
 
 # 4.分布の可視化
 ## 1.カテゴリ変数の表示
-- geom_bar(): カテゴリ変数の分布を棒グラフで表示する。  
-- 変数をファクタに変換し、度数に基づいて並び替える。
+geom_bar()関数でカテゴリ変数の分布を棒グラフで表示することができます。  
+また、度数に基づいて並び替えるには、変数をファクタに変換します。
 ```{r}
 ggplot(penguins, aes(x = fct_infreq(species))) + 
   geom_bar()
 ```
 
 ### 2.ヒストグラム
-- geom_histogram(): ヒストグラムを表示する。
-- binwidth引数でヒストグラムの間隔の幅を設定する。
+geom_histogram()関数でヒストグラムを表示することができます。
+なお、binwidth引数でヒストグラムの間隔の幅を設定します。
 ```{r}
 ggplot(penguins, aes(x = body_mass_g)) + 
   geom_histogram(binwidth = 200)
 ```
-- geom_density(): ヒストグラムを平準化した密度プロットを表示する。
+geom_density()関数でヒストグラムを平準化した密度プロットを表示することができます。
 ```{r}
 ggplot(penguins, aes(x = body_mass_g)) + 
   geom_density()
@@ -273,9 +294,10 @@ ggplot(penguins, aes(x = fct_infreq(species))) +
 ```
 
 ### 3.geom_histogram()のbins引数の意味
-bins引数は、ヒストグラムの感覚の幅を調整する。
+bins引数は、ヒストグラムの間隔の幅を調整します。
 
 ### 4.diamondsデータセットのcarat変数のヒストグラムを作成
+binwidthでヒストグラムの幅を0.5に調整します。
 ```{r}
 ggplot(diamonds, aes(x = carat)) + 
   geom_histogram(binwidth = 0.5)
@@ -284,20 +306,20 @@ ggplot(diamonds, aes(x = carat)) +
 
 # 5.関係の可視化
 ## 箱ひげ図でデータを可視化
-- geom_boxplot(): 箱ひげ図を作成する。
+geom_boxplot()で箱ひげ図を作成します。
 ```{r}
 ggplot(penguins, aes(x = species, y = body_mass_g)) + 
   geom_boxplot()
 ```
-- geom_densityt(): 密度プロットを作成する。
-- linewidth引数で線の太さを調整する。
+geom_densityt()で密度プロットを作成します。
+linewidth引数で線の太さを調整します。
 ```{r}
 ggplot(penguins, aes(x = body_mass_g,
                      color = species)) + 
   geom_density(linewidth = 0.75)
 ```
-- speciesをcolorとfillでエステティックにマッピングする。
-- alpha引数で透過性を追加する。
+speciesをcolorとfillでエステティックにマッピングします。
+また、alpha引数で色の透過性を追加します。
 ```{r}
 ggplot(penguins, aes(x = body_mass_g,
                      color = species,
@@ -310,42 +332,45 @@ ggplot(penguins, aes(x = body_mass_g,
 ggplot(penguins, aes(x = island, fill = species)) + 
   geom_bar()
 ```
-- position = "fill"で相対密度プロットを作成する。  
-  島全体のペンギンの数の不平等の影響を受けないため、島全体の種類の分布を比較するのに便利。
+position = "fill"で相対密度プロットを作成します。  
+これにより、島全体のペンギンの数の不平等の影響を排除するため、島全体の種類の分布を比較するのに便利です。
 ```{r}
 ggplot(penguins, aes(x = island, fill = species)) + 
   geom_bar(position = "fill")
 ```
 
 ### 3.プロットをファセットに分割して表示
-- facet_wrap(~変数名): プロットをファセットに分割する。ファセットとは、データのサブセットのこと。
+facet_wrap(~変数名)でプロットを特定の変数のファセット（サブセット）に分割することができます。
 ```{r}
 ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g)) + 
   geom_point(aes(color = species, shape = species)) + 
   facet_wrap(~island)
 ```
+
+
 # 練習問題
 ### 1.mpgデータフレームの確認
 ```{r}
 glimpse(mpg)
 ```
 
-### 2.mpgデータフレームのhwyとdisplの散布図を作成
+### 2.mpgデータフレームのhwyとdisplの散布図
 - displ: エンジン排気量
 - hwy: 高速道路での燃費
-- color = cty: 市街地の燃費（cty）に基づき、色を設定する。 
+
+color = ctyで市街地の燃費（cty）に基づき、色を設定します。
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(aes(color = cty)) + 
   geom_smooth(method = "lm")
 ```
-- size = cty: 市街地の燃費（cty）に基づき、点のサイズを設定。
+size = ctyで市街地の燃費（cty）に基づき、点のサイズを設定します。
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(aes(size = cty)) + 
   geom_smooth(method = "lm")
 ```
-- size = cty: 市街地の燃費（cty）に基づき、色と点のサイズを設定。
+色と点のサイズの両方を設定します。
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy)) +
   geom_point(aes(color = cty, size = cty)) + 
@@ -353,13 +378,14 @@ ggplot(mpg, aes(x = displ, y = hwy)) +
 ```
 
 ### 3.３番目の変数をlinewidthにマッピング
-linewidthは線の太さを調整するためのもの。geom_point()では、エラーが出る。
+linewidthは線の太さを調整するためのもの。geom_point()では、エラーが出ます。
 
 ### 4.同じ変数を複数のエステティックにマッピング
-同じ変数から出る特徴を視覚的に強調することができる。
+同じ変数から出る特徴を視覚的に強調することができます。
 
 ### 5.bill_depth_mmとbill_lengthの散布図を作成
-くちばしの深さが増加すると長さが減少する傾向があり、全体としては負の相関が見られる。ただし、ファセットに分割すると正の相関がみられる。
+くちばしの深さが増加すると長さが減少する傾向があり、全体としては負の相関が見られます。  
+ただし、ファセットに分割すると正の相関がみられます。
 ```{r}
 ggplot(penguins, aes(x = bill_depth_mm,
                      y = bill_length_mm,)) +
@@ -368,7 +394,7 @@ ggplot(penguins, aes(x = bill_depth_mm,
 ```
 
 ### 6.凡例の生成
-凡例が2つ表示される理由は、ggplot() 内の aes() に同じ変数（species）を color と shape の両方にマッピングしているため。
+以下のコードでは、ggplot()のaes()関数内で同じ変数（species）をcolorとshapeの両方にマッピングしているため、凡例が2つ表示されます。
 ```{r}
 ggplot(penguins, aes(x = bill_length_mm, 
                      y = bill_depth_mm,
@@ -379,6 +405,7 @@ ggplot(penguins, aes(x = bill_length_mm,
  geom_point() +
  labs(color = "Species")
 ```
+geom_point()関数内で指定するように修正します。
 ```{r}
 ggplot(penguins, aes(x = bill_length_mm, 
                      y = bill_depth_mm)
@@ -386,6 +413,3 @@ ggplot(penguins, aes(x = bill_length_mm,
  geom_point(aes(color = species, shape = species)) +
  labs(color = "Species")
 ```
-
-# 参考文献
-- Rではじめるデータサイエンス  [Amazonで見る](https://www.amazon.co.jp/R%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%82%B5%E3%82%A4%E3%82%A8%E3%83%B3%E3%82%B9-Hadley-Wickham/dp/487311814X)
