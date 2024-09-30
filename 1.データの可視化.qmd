@@ -10,13 +10,18 @@ format:
     toc: true
 ---
 # 目的
-ggplot2を用いてデータを可視化する。
+Rのデータ可視化パッケージ、ggplot2を用いてデータを可視化します。
 
 # 1.はじめに
 ### 必要なパッケージをロード
-- tidyverse: ggplot2を含むRの基本機能を提供するパッケージ
-- palmerpenguins: 南極のパーマーランドの３つの島に生息するペンギンの身体の測定値に関するデータ（penguins）を提供するパッケージ
-- ggthems: 色覚以上に配慮したカラーパレットを提供するパッケージ
+以下の３つのパッケージをロードします。
+
+- tidyverse:  
+  ggplot2やdplyrなどのデータ分析や可視化を行うためのパッケージ群の集合体
+- palmerpenguins:  
+  南極のパーマーランドの３つの島に生息するペンギンの身体の測定値に関するデータ（penguins）を提供するパッケージ
+- ggthems:  
+  色覚以上に配慮したカラーパレットを提供するパッケージ
 ```{r}
 library(tidyverse)
 library(palmerpenguins)
@@ -25,62 +30,91 @@ library(ggthemes)
 
 
 # 2.第１ステップ
-### penguinsデータフレームの確認
-- glimpse(): 全ての変数と各変数の最初のいくつかの観測地を表示する
-- View(): インタラクティブなデータビューアを表示する
+### データフレームの確認
+以下の関数を用いて、データフレームの内容を確認します。
+
+- glimpse(): 全ての変数と各変数の最初のいくつかの観測地を表示
+- View(): スクロールやフィルタリングができるインタラクティブなデータビューアを表示
 ```{r}
 glimpse(penguins)
 #View(penguins)
 ```
 
 ### ggplot2の組み立て
-- mapping引数: プロットの可視化特性（aesthetic）を定義する。aes()関数で軸などのを設定する。
-- geom_: プロットが使用する幾何オブジェクトを定義する。
-  - geom_point(): 散布図
-  - geom_bar(): 棒グラフ
-  - geom_line(): 折れ線グラフ
-  - geom_boxplot(): 箱ひげ図
+ggplot2では、ggplot()関数を用いてプロットを始め、プロットオブジェクトを定義してから「レイヤ」を追加します。  
+
+ggplot()の第１引数はデータセット、第２引数はmapping引数です。  
+なお、mapping引数は常にaes()関数で定義され、aes()にて軸の設定などを行います。
+
+mapping引数を定義しないと空のキャンバスが表示されます。
+```{r}
+ggplot(data = penguins)
+```
+mapping引数を定義して、aes()関数でｘ軸とｙ軸を指定します。
 ```{r}
 ggplot(
   data = penguins,
-  mapping = aes(x = flipper_length_mm, # x軸の設定
-                y = body_mass_g, # y軸の設定
-                color = species) # speciesで色分け
+  mapping = aes(x = flipper_length_mm, y = body_mass_g) # 軸を指定
+  )
+```
+geom_point()関数で点のレイヤをプロットに追加します。
+
+（参考）プロットが使用する幾何オブジェクトの種類
+
+- geom_point(): 散布図
+- geom_bar(): 棒グラフ
+- geom_line(): 折れ線グラフ
+- geom_boxplot(): 箱ひげ図
+
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, body_mass_g)
+) + 
+  geom_point() # 散布図を設定
+```
+aes()関数内のエステティックマッピングにcolor = speciesを追加してペンギンの種類ごとの色分けを行います。
+```{r}
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm,
+                y = body_mass_g,
+                color = species)  # ペンギンの種類ごとの色分けを設定
 ) +
  geom_point()
 ```
 
 ### ペンギンの種類ごとに直線を引く
-- geom_smooth(method = "lm"): linear-modelにフィットした線を描画するレイアを追加する。
+散布図にもう一つレイヤを追加して体重とフリッパーの関係を示す滑らかなカーブを設定します。
 ```{r}
 ggplot(
   data = penguins,
-  mapping = aes(x = flipper_length_mm, # x軸の設定
-                y = body_mass_g, # y軸の設定
-                color = species) # speciesで色分け
+  mapping = aes(x = flipper_length_mm,
+                y = body_mass_g, 
+                color = species) 
 ) +
  geom_point() + 
- geom_smooth(method = "lm")
+ geom_smooth(method = "lm") # "lm":linear-modelにフィットした線を描画するレイアを追加
 ```
 
 ### ラベルの改善
-- colorに加えてshapeをエステティックにマッピングして、ペンギンの種類ごと異なる形を使用する。
-- labs(): プロットラベルにタイトルなどを指定する。
-- scale_color_colorblind(): カラーパレットを色覚以上に対応した改善を行う。
+colorに加えてshapeをエステティックにマッピングして、ペンギンの種類ごと異なる形を使用します。  
+
+また、labs()関数でプロットラベルにタイトルなどを指定し、scale_color_colorblind()関数でカラーパレットを色覚異常に対応した改善を行います。
 ```{r}
 ggplot(
   data = penguins,
   mapping = aes(x = flipper_length_mm, y = body_mass_g)
 ) +
- geom_point(mapping = aes(color = species, shape = species)) + 
+ geom_point(mapping = aes(color = species, shape = species)) + # shape引数でペンギンの種類ごと異なる形を使用
  geom_smooth(method = "lm") +
- labs(
+ labs( # プロットラベルにタイトルなどを指定
   title = "Body mass and flipper length",
   subtitle = "Dimentions for Adelie, Chinstrap, and Gentoo Penguins",
   x = "Flipper length(mm)", y = "Body mass(g)",
   colort = "Species", shape = "Species"
  ) + 
- scale_color_colorblind()
+ scale_color_colorblind() # カラーパレットを色覚異常に対応
 ```
 
 # 練習問題
