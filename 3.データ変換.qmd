@@ -1,0 +1,378 @@
+---
+title: "3.データ変換"
+date: "2024-09-29"
+execute: 
+  error: true
+  cache: true
+format:
+  html: 
+    slide-level: 2
+    toc: true
+---
+
+# 1.目的
+データフレームの変換するための主要ツールについて整理する。
+
+### 準備
+- dplyer（ディープライ）パッケージ: tidyverseのもう１つのコアメンバー
+- nycflights13: 2013年にニューヨーク市を出発した336,776便のフライトについてのデータセット
+```{r}
+library(nycflights13)
+library(tidyverse)
+```
+```{r}
+glimpse(flights)
+```
+- <int>: 整数の省略形
+- <dbl>: 倍精度（実数）の省略形
+- <chr>: 文字の省略形
+- <dttm>: 日時の省略形
+
+### パイプ: |>
+- 左側のものを受け取り、右側の関数に渡す処理を行うもの。  
+- 「次に何をするか（then）」の意味で使われる。
+  - x |> f(y) = f(x, y)
+  - x |> f(y) | g(z) = g(f(x, y), z)
+```{r}
+flights |>
+  filter(dest == "IAH") |>
+  group_by(year, month, day) |>
+  summarize(
+    arr_delay = mean(arr_delay, na.rm = TRUE)
+  )
+```
+- filter(dest == "IAH"):
+  - 行き先（dest）が「IAH」（ジョージ・ブッシュ・インターコンチネンタル空港）のフライトだけを抽出する。
+- group_by(year, month, day):
+  - フライトのデータを年、月、日でグループ化しする。これにより、同じ日に出発したフライトのデータが一つにまとめられる。
+- summarize(arr_delay = mean(arr_delay, na.rm = TRUE)):
+  - 各グループの到着遅延時間（arr_delay）の平均を計算する。na.rm = TRUEにより、NA（欠損値）は計算から除外される。
+
+#  2.行
+### filter()
+filter()関数は、列の値に基づいて行を選択する。なお、既存のflightsデータセットは変更されない。  
+- 第１引数：データフレーム
+- 第２引数以降：行を選択するために真でなければならない条件
+
+120分以上遅れて出発したフライトを抽出
+```{r}
+filter(flights, dep_delay > 120)
+```
+```{r}
+# パイプ演算子を用いた表記
+flights |>
+  filter(dep_delay > 120)
+```
+- &: and条件
+```{r}
+flights |>
+  filter(month == 1 & day == 1)
+```
+- |: or条件
+```{r}
+flights |>
+  filter(month == 1 | day == 1)
+```
+- %in%: |と==の組み合わせ  
+変数が右辺の値の１つに等しい行を保持する。
+```{r}
+flights |>
+  filter(month %in% c(1, 2))
+```
+
+### arange()
+arrange()関数は、列の値に基づいて行の順序を変更する。
+```{r}
+flights |>
+  arrange(year, month, day, dep_time)
+```
+- desc(): データを降順で並び替え
+```{r}
+flights |>
+ arrange(desc(dep_delay))
+```
+
+### distinct()
+distinct()関数は、データセット内の一意の行を見つけるもので、主に行に対して動作する。
+```{r}
+flights |>
+  distinct(origin, dest)
+```
+- .keep_all = TRUEオプション: 他の列を保持する場合
+```{r}
+flights |>
+  distinct(origin, dest, .keep_all = TRUE)
+```
+
+### count()
+count()関数は、データセット内の特定の行の出現数を見つけるもの。
+```{r}
+flights |>
+  count(origin, dest)
+```
+- sort = TRUEオプション: 出現数の降順に並び替え
+```{r}
+flights |>
+  count(origin, dest, sort = TRUE)
+```
+
+# 練習問題
+### 1. 次の条件を満たす便を検索する
+- 到着が２時間以上遅れた瓶
+```{r}
+flights |>
+  filter(arr_delay >= 120)
+```
+- ヒューストン（"IAH"または"HOU"）行きの便
+```{r}
+flights |>
+  filter(dest == "IAH" | dest == "HOH")
+```
+- ユナイテッド航空、アメリカン航空、デルタ航空便
+```{r}
+flights |>
+  filter(carrier %in% c("UA", "AA", "DL"))
+```
+- 夏（７～９月）に出発した便
+```{r}
+flights |>
+  filter(month %in% c(7, 8, 9))
+```
+- ２時間以上遅れて到着したものの、出発は遅れなかった便
+```{r}
+flights |>
+  filter(arr_delay >= 30 & dep_delay == 0)
+```
+- 到着が少なくとも１時間遅れたが、フライト中に30分遅れた便
+```{r}
+flights |>
+  filter(arr_delay >= 60 & (dep_delay - arr_delay) >= 30)
+```
+
+### 2.出発の遅れが最も長いフライトを見つける
+```{r}
+flights |>
+  arrange(desc(dep_delay))
+```
+
+### 3.最も早いフライトを見つける
+```{r}
+flights |>
+  arrange(distance / air_time)
+```
+
+### 4.2013年のすべての日にフライトがあったか調べる
+```{r}
+flights |>
+  filter(year == 2013) |>
+  group_by(year, month, day)
+```
+
+### 5.どの便が最も遠い距離を移動したか、最も短い距離を移動したか調べる
+```{r}
+flights |>
+  arrange(desc(distance))
+```
+```{r}
+flights |>
+  arrange(distance)
+```
+
+### 6.filter()とarrange()の両方を使う場合、どちらを先に使用したかは問題になるか
+arrange()は、データを並び替えているだけのため、フィルタリングを行う場合はfilter()を先に使用すべき。
+
+# 3.列
+### mutate()
+- 既存の列から計算される新しい列を追加する。
+- .before引数を使用して新しい列を左側に追加する。
+```{r}
+flights |>
+  mutate(
+    gain = dep_delay - arr_delay,
+    speed = distance / air_time * 60,
+    .before = 1
+  )
+```
+- .after引数を使用して新しい列を右側に追加する。
+- .beforeも.afterも位置の代わりに変数を指定することができる。
+```{r}
+flights |>
+  mutate(
+    gain = dep_delay - arr_delay,
+    speed = distance / air_time * 60,
+    .after = day # dayの後に新しい列を追加
+  )
+```
+- .keep引数を使用して保持する変数を制御する。
+- .keep = "used"でmutate()で関与または作成された列のみを保持する。
+```{r}
+flights |>
+  mutate(
+    gain = dep_delay - arr_delay,
+    speed = distance / air_time * 60,
+    .keep = "used"
+  )
+```
+
+### select()
+- 変数名に基づく操作を使って有用なサブセットを迅速に求める。
+- 名前を指定して列を選ぶ。
+```{r}
+flights |>
+  select(year, month, day)
+```
+- yearからdayまでの列を選ぶ
+```{r}
+flights |>
+  select(year:day)
+```
+- yearからdayまで以外の列を選ぶ。
+```{r}
+flights |>
+  select(!year:day)
+```
+- 文字であるすべの列を選ぶ。
+```{r}
+flights |>
+  select(where(is.character))
+```
+- abcから始まる名前にマッチする　など。
+```bash
+select(starts_with("abc"))
+```
+- 変数の名前を変更して表示する（新しい名前＝古い名前）。
+```{r}
+flights |>
+  select(tail_num = tailnum)
+```
+
+### rename()
+- 既存のすべての変数を保持し、いくつかの変数の名前を変更して表示する（新しい名前＝古い名前）。
+```{r}
+flights |>
+  rename(tail_num = tailnum)
+```
+
+### relocate()
+- 重要な変数を前に移動する。
+```{r}
+flights |>
+  relocate(time_hour, air_time)
+```
+- .beforeと.afterを使って配置する場所を指定する。
+```{r}
+flights |>
+  relocate(year:dep_time, .after = time_hour)
+flights |>
+  relocate(starts_with("arr"), .before = time_hour)
+```
+
+# 練習問題
+### 1.
+
+# 4.パイプ
+- 複数の関数と結合するときに力を発揮する。
+- 例：ヒューストンのIAH空港への最速便を見つけたい場合。
+```{r}
+flights |>
+  filter(dest == "IAH") |>
+  mutate(speed = distance / air_time * 60) |>
+  select(year:day, dep_time, carrier, flight, speed) |>
+  arrange(desc(speed))
+```
+
+# 5.グループ
+### group_by()
+- データセットを分析のために意味のあるグループに分割する。
+```{r}
+flights |>
+  group_by(month)
+```
+
+### summarize()
+- グループ化した上で１つの要約統計量を計算する。
+```{r}
+flights |>
+  group_by(month) |>
+  summarize(
+    avg_delay = mean(dep_delay)
+  )
+```
+- na.rm = TRUE: 欠損値を無視するように指示する。
+```{r}
+flights |>
+  group_by(month) |>
+  summarize(
+    delay = mean(dep_delay, na.rm = TRUE)
+  )
+```
+- n = n(): 各グループの行数を返す。
+```{r}
+flights |>
+  group_by(month) |>
+  summarize(
+    delay = mean(dep_delay, na.rm = TRUE),
+  n = n()
+  )
+```
+
+### slice()
+各グループ内で特定の行を抽出する。
+
+- 各グループの１行目をとる。
+```bash
+def |> slice_head(n = 1)
+```
+- 例：目的地ごとに到着したときに最も遅れているフライトを検索する。
+- ただし、slice_max()は最大値を保持するため、n = 1には重複がある。
+```{r}
+flights |>
+  group_by(dest) |>
+  slice_max(arr_delay, n = 1) |>
+  relocate(dest)
+```
+- with_ties = FALSE: グループごと１行だけ抽出する。
+```{r}
+flights |>
+  group_by(dest) |>
+  slice_max(arr_delay, n = 1, with_ties = FALSE) |>
+  relocate(dest)
+```
+
+### ungroup()
+- グループ化を解除する。
+```{r}
+daily <- flights |>
+  group_by(year, month, day)
+daily
+```
+```{r}
+daily  |>
+  ungroup()
+```
+```{r}
+daily |>
+  ungroup()  |>
+  summarize(
+    avg_delay = mean(dep_delay, na.rm = TRUE),
+    flignts = n()
+  )
+```
+
+### .by
+```{r}
+flights |>
+  summarize(
+    delay = mean(dep_delay, na.rm = TRUE),
+    n = n(),
+    .by = month
+  )
+```
+```{r}
+flights |>
+  summarize(
+    delay = mean(dep_delay, na.rm = TRUE),
+    n = n(),
+    .by = c(origin, dest)
+  )
+```

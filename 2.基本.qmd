@@ -1,0 +1,70 @@
+---
+title: "2.基本"
+date: "2024-09-29"
+execute: 
+  error: true
+  cache: true
+format:
+  html: 
+    slide-level: 2
+    toc: true
+---
+# 目的
+Rの基本的な仕組みを整理する。
+
+# 1.コーディングの基本
+### 代入演算子：<-
+新たなオブジェクトは、代入演算子<-を使って作成する。
+```{r}
+x <- 3 * 4
+```
+c(): 複数の要素をベクトルとしてcombine（統合）する。
+```{r}
+primes <- c(1, 2, 3, 4, 5)
+```
+ベクトルに対する計算は、ベクトルのすべての要素に適用される。
+```{r}
+primes * 2
+```
+
+# 2.コメント：＃
+Rでは、#以降のテキストを無視する。  
+コメントには、`方法（how）や内容(what)ではなく、理由（why）を記載する。`  
+例えば、デフォルト値を変更した場合など、変更した理由について自分の考えをコメントに記載する。
+
+# 練習問題
+### 1.コードがエラーになる理由
+スペルミスが原因： my_var"l"able → my_var"i"able
+```{r}
+my_variable <- 10
+my_varlable
+```
+
+### 2.Rコマンドの修正
+```{r}
+library(todyverse)
+ ggplot(data = mpg)+
+   geom_point(mapping = aes(x = displ, y = hwy)) +
+   geom_smooth(method = "lm")
+```
+- スペルミスを修正
+  - t"o"dyverse　→　t"i"dyverse
+  - ""lm"　→　""lm"""
+- mapping引数は、ggplotの第２引数となるように設定する必要がある
+```{r}
+library(tidyverse)
+ ggplot(data = mpg, mapping = aes(x = displ, y = hwy))+
+   geom_point() +
+   geom_smooth(method = "lm")
+```
+### 3. Alt + Shift + Kの実行結果
+
+### 4.コードの確認
+ggsave()の第２引数でmy_bar_plotが指定されているため、my_bar_plotが保存される。
+```{r}
+my_bar_plot <- ggplot(mpg, aes(x = class)) + 
+  geom_bar()
+my_scatter_plot <- ggplot(mpg, aes(x = cty, y = hwh)) + 
+  geom_plot()
+ggsave(filename = "my-plot.png", plot = my_bar_plot)
+```
