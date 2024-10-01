@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#air_timeの名前をair_time_minに変更しデータフレームの先頭に移動" id="toc-air_timeの名前をair_time_minに変更しデータフレームの先頭に移動" class="nav-link" data-scroll-target="#air_timeの名前をair_time_minに変更しデータフレームの先頭に移動">6.air_timeの名前をair_time_minに変更し、データフレームの先頭に移動</a></li>
   <li><a href="#エラー修正" id="toc-エラー修正" class="nav-link" data-scroll-target="#エラー修正">7.エラー修正</a></li>
   </ul></li>
-  <li><a href="#パイプ-1" id="toc-パイプ-1" class="nav-link" data-scroll-target="#パイプ-1">4.パイプ</a></li>
+  <li><a href="#パイプ-1" id="toc-パイプ-1" class="nav-link" data-scroll-target="#パイプ-1">4.パイプ: |&gt;</a></li>
   <li><a href="#グループ" id="toc-グループ" class="nav-link" data-scroll-target="#グループ">5.グループ</a>
   <ul class="collapse">
   <li><a href="#group_by" id="toc-group_by" class="nav-link" data-scroll-target="#group_by">group_by()</a></li>
@@ -126,6 +126,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#slice" id="toc-slice" class="nav-link" data-scroll-target="#slice">slice()</a></li>
   <li><a href="#ungroup" id="toc-ungroup" class="nav-link" data-scroll-target="#ungroup">ungroup()</a></li>
   <li><a href="#by" id="toc-by" class="nav-link" data-scroll-target="#by">.by</a></li>
+  </ul></li>
+  <li><a href="#練習問題-2" id="toc-練習問題-2" class="nav-link" data-scroll-target="#練習問題-2">練習問題</a>
+  <ul class="collapse">
+  <li><a href="#平均遅延が最悪な航空会社を確認する" id="toc-平均遅延が最悪な航空会社を確認する" class="nav-link" data-scroll-target="#平均遅延が最悪な航空会社を確認する">1.平均遅延が最悪な航空会社を確認する</a></li>
+  <li><a href="#目的地ごとに出発時に最も遅延した便" id="toc-目的地ごとに出発時に最も遅延した便" class="nav-link" data-scroll-target="#目的地ごとに出発時に最も遅延した便">2.目的地ごとに、出発時に最も遅延した便</a></li>
+  <li><a href="#日の遅延の変化" id="toc-日の遅延の変化" class="nav-link" data-scroll-target="#日の遅延の変化">3.１日の遅延の変化</a></li>
+  <li><a href="#slice_minのnに負の値を与えた結果" id="toc-slice_minのnに負の値を与えた結果" class="nav-link" data-scroll-target="#slice_minのnに負の値を与えた結果">4.slice_min()のnに負の値を与えた結果</a></li>
+  <li><a href="#count関数とsort引数" id="toc-count関数とsort引数" class="nav-link" data-scroll-target="#count関数とsort引数">count関数とsort引数</a></li>
+  <li><a href="#出力結果の検証" id="toc-出力結果の検証" class="nav-link" data-scroll-target="#出力結果の検証">6.出力結果の検証</a></li>
+  <li><a href="#集計とサンプルサイズ" id="toc-集計とサンプルサイズ" class="nav-link" data-scroll-target="#集計とサンプルサイズ">6.集計とサンプルサイズ</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1349,11 +1359,15 @@ $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-
 </section>
 </section>
 <section id="パイプ-1" class="level1">
-<h1>4.パイプ</h1>
+<h1>4.パイプ: |&gt;</h1>
+<p>|&gt; は一般的に「パイプ演算子」と呼ばれ、データをある関数の入力として渡すために使います。</p>
 <ul>
-<li>複数の関数と結合するときに力を発揮する。</li>
-<li>例：ヒューストンのIAH空港への最速便を見つけたい場合。</li>
+<li><p>関数の合成:<br>
+一つの関数の出力を別の関数の入力として使うことができます。例えば、x |&gt; f |&gt; g は、g(f(x)) と同等です。</p></li>
+<li><p>コードの可読性向上:<br>
+パイプを使うことで、データの流れを視覚的に表現でき、読みやすくなることがあります。</p></li>
 </ul>
+<p>ヒューストンのIAH空港への最速便を見つける場合</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
 <span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dest <span class="sc">==</span> <span class="st">"IAH"</span>) <span class="sc">|&gt;</span></span>
@@ -1382,9 +1396,7 @@ $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-
 <h1>5.グループ</h1>
 <section id="group_by" class="level3">
 <h3 class="anchored" data-anchor-id="group_by">group_by()</h3>
-<ul>
-<li>データセットを分析のために意味のあるグループに分割する。</li>
-</ul>
+<p>データセットを意味のあるグループに分割します。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
 <span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1412,9 +1424,7 @@ $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-
 </section>
 <section id="summarize" class="level3">
 <h3 class="anchored" data-anchor-id="summarize">summarize()</h3>
-<ul>
-<li>グループ化した上で１つの要約統計量を計算する。</li>
-</ul>
+<p>グループ化した上で１つの要約統計量を計算します。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
 <span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month) <span class="sc">|&gt;</span></span>
@@ -1439,9 +1449,7 @@ $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-
 12    12        NA</code></pre>
 </div>
 </div>
-<ul>
-<li>na.rm = TRUE: 欠損値を無視するように指示する。</li>
-</ul>
+<p>na.rm = TRUE: 欠損値を無視するように指示</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
 <span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month) <span class="sc">|&gt;</span></span>
@@ -1466,9 +1474,7 @@ $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-
 12    12 16.6 </code></pre>
 </div>
 </div>
-<ul>
-<li>n = n(): 各グループの行数を返す。</li>
-</ul>
+<p>n = n(): 各グループの行数を返す</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
 <span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month) <span class="sc">|&gt;</span></span>
@@ -1497,20 +1503,16 @@ $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-
 </section>
 <section id="slice" class="level3">
 <h3 class="anchored" data-anchor-id="slice">slice()</h3>
-<p>各グループ内で特定の行を抽出する。</p>
-<ul>
-<li>各グループの１行目をとる。</li>
-</ul>
+<p>各グループ内で特定の行を抽出します。</p>
+<p>例えば、各グループの１行目をとる場合、以下のように指定します。</p>
 <div class="sourceCode" id="cb106"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="ex">def</span> <span class="kw">|</span><span class="op">&gt;</span> slice_head<span class="kw">(</span><span class="ex">n</span> = 1<span class="kw">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li>例：目的地ごとに到着したときに最も遅れているフライトを検索する。</li>
-<li>ただし、slice_max()は最大値を保持するため、n = 1には重複がある。</li>
-</ul>
+<p>目的地ごと、到着が最も遅れたフライトを検索します。<br>
+ただし、slice_max()は最大値を保持するため、n = 1には重複がある。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
 <span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dest) <span class="sc">|&gt;</span></span>
 <span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(arr_delay, <span class="at">n =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(dest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(dest) <span class="co"># destを前に移動</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 108 × 19
 # Groups:   dest [105]
@@ -1532,9 +1534,7 @@ $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-
 #   hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
 </div>
 </div>
-<ul>
-<li>with_ties = FALSE: グループごと１行だけ抽出する。</li>
-</ul>
+<p>with_ties = FALSE: グループごと１行だけ抽出</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
 <span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dest) <span class="sc">|&gt;</span></span>
@@ -1564,9 +1564,8 @@ $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-
 </section>
 <section id="ungroup" class="level3">
 <h3 class="anchored" data-anchor-id="ungroup">ungroup()</h3>
-<ul>
-<li>グループ化を解除する。</li>
-</ul>
+<p>グループ化を解除します。</p>
+<p>year, month, dayでグループ化を行い、dailyに格納します。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a>daily <span class="ot">&lt;-</span> flights <span class="sc">|&gt;</span></span>
 <span id="cb111-2"><a href="#cb111-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, month, day)</span>
@@ -1592,6 +1591,7 @@ $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-
 #   hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
 </div>
 </div>
+<p>ungroup()関数でグループ化を解除します。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>daily  <span class="sc">|&gt;</span></span>
 <span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1615,6 +1615,7 @@ $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-
 #   hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
 </div>
 </div>
+<p>グループ化されていないデータフレームを要約すると、すべての行を１つのグループに属するものとして扱います。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>daily <span class="sc">|&gt;</span></span>
 <span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="sc">|&gt;</span></span>
@@ -1632,12 +1633,13 @@ $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-
 </section>
 <section id="by" class="level3">
 <h3 class="anchored" data-anchor-id="by">.by</h3>
+<p>.by引数を用いたグループ化の方法もあります。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
 <span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
 <span id="cb117-3"><a href="#cb117-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">delay =</span> <span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
 <span id="cb117-4"><a href="#cb117-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb117-5"><a href="#cb117-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> month</span>
+<span id="cb117-5"><a href="#cb117-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> month <span class="co"># monthでグループ化</span></span>
 <span id="cb117-6"><a href="#cb117-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 12 × 3
@@ -1657,12 +1659,13 @@ $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-
 12     9  6.72 27574</code></pre>
 </div>
 </div>
+<p>複数の変数でグループ化する場合はベクトルを用います。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
 <span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
 <span id="cb119-3"><a href="#cb119-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">delay =</span> <span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
 <span id="cb119-4"><a href="#cb119-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb119-5"><a href="#cb119-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> <span class="fu">c</span>(origin, dest)</span>
+<span id="cb119-5"><a href="#cb119-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> <span class="fu">c</span>(origin, dest) <span class="co"># originとdestでグループ化</span></span>
 <span id="cb119-6"><a href="#cb119-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 224 × 4
@@ -1679,6 +1682,425 @@ $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-
  9 JFK    MCO   10.6   5464
 10 LGA    ORD   10.7   8857
 # ℹ 214 more rows</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="練習問題-2" class="level1">
+<h1>練習問題</h1>
+<section id="平均遅延が最悪な航空会社を確認する" class="level3">
+<h3 class="anchored" data-anchor-id="平均遅延が最悪な航空会社を確認する">1.平均遅延が最悪な航空会社を確認する</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a>  flights <span class="sc">|&gt;</span></span>
+<span id="cb121-2"><a href="#cb121-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(carrier, dest) <span class="sc">|&gt;</span></span>
+<span id="cb121-3"><a href="#cb121-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(</span>
+<span id="cb121-4"><a href="#cb121-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">delay =</span> <span class="fu">mean</span>(arr_delay, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb121-5"><a href="#cb121-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> <span class="fu">n</span>()</span>
+<span id="cb121-6"><a href="#cb121-6" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb121-7"><a href="#cb121-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(delay))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'carrier'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 314 × 4
+# Groups:   carrier [16]
+   carrier dest  delay     n
+   &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;int&gt;
+ 1 UA      STL   110       2
+ 2 OO      ORD   107       1
+ 3 OO      DTW    68.5     2
+ 4 UA      RDU    56       1
+ 5 EV      CAE    42.8   113
+ 6 EV      TYS    41.2   323
+ 7 EV      PBI    40.7     6
+ 8 EV      TUL    33.7   315
+ 9 EV      OKC    30.6   346
+10 UA      JAC    29.9    23
+# ℹ 304 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
+<span id="cb124-2"><a href="#cb124-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb124-3"><a href="#cb124-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">delay =</span> <span class="fu">mean</span>(arr_delay, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb124-4"><a href="#cb124-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb124-5"><a href="#cb124-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> <span class="fu">c</span>(carrier, dest)</span>
+<span id="cb124-6"><a href="#cb124-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb124-7"><a href="#cb124-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(delay))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 314 × 4
+   carrier dest  delay     n
+   &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;int&gt;
+ 1 UA      STL   110       2
+ 2 OO      ORD   107       1
+ 3 OO      DTW    68.5     2
+ 4 UA      RDU    56       1
+ 5 EV      CAE    42.8   113
+ 6 EV      TYS    41.2   323
+ 7 EV      PBI    40.7     6
+ 8 EV      TUL    33.7   315
+ 9 EV      OKC    30.6   346
+10 UA      JAC    29.9    23
+# ℹ 304 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="目的地ごとに出発時に最も遅延した便" class="level3">
+<h3 class="anchored" data-anchor-id="目的地ごとに出発時に最も遅延した便">2.目的地ごとに、出発時に最も遅延した便</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
+<span id="cb126-2"><a href="#cb126-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dest) <span class="sc">|&gt;</span></span>
+<span id="cb126-3"><a href="#cb126-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(dep_delay, <span class="at">n =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb126-4"><a href="#cb126-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(dest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 105 × 19
+# Groups:   dest [105]
+   dest   year month   day dep_time sched_dep_time dep_delay arr_time
+   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+ 1 ABQ    2013    12    14     2223           2001       142      133
+ 2 ACK    2013     7    23     1139            800       219     1250
+ 3 ALB    2013     1    25      123           2000       323      229
+ 4 ANC    2013     8    17     1740           1625        75     2042
+ 5 ATL    2013     7    22     2257            759       898      121
+ 6 AUS    2013     7    10     2056           1505       351     2347
+ 7 AVL    2013     6    14     1158            816       222     1335
+ 8 BDL    2013     2    21     1728           1316       252     1839
+ 9 BGR    2013    12     1     1504           1056       248     1628
+10 BHM    2013     4    10       25           1900       325      136
+# ℹ 95 more rows
+# ℹ 11 more variables: sched_arr_time &lt;int&gt;, arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;,
+#   flight &lt;int&gt;, tailnum &lt;chr&gt;, origin &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;,
+#   hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="日の遅延の変化" class="level3">
+<h3 class="anchored" data-anchor-id="日の遅延の変化">3.１日の遅延の変化</h3>
+<p>時間帯ごとの平均到着遅延時間を確認したところ、時間帯が遅くなるにつれて、遅延が増えることがわかりました。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb128"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a>flights_hour <span class="ot">&lt;-</span></span>
+<span id="cb128-2"><a href="#cb128-2" aria-hidden="true" tabindex="-1"></a>  flights <span class="sc">|&gt;</span></span>
+<span id="cb128-3"><a href="#cb128-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(hour) <span class="sc">|&gt;</span></span>
+<span id="cb128-4"><a href="#cb128-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(</span>
+<span id="cb128-5"><a href="#cb128-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_delay =</span> <span class="fu">mean</span>(arr_delay, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb128-6"><a href="#cb128-6" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb128-7"><a href="#cb128-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
+<span id="cb128-8"><a href="#cb128-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb128-9"><a href="#cb128-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(flights_hour, <span class="fu">aes</span>(<span class="at">x =</span> hour, <span class="at">y =</span> avg_delay)) <span class="sc">+</span></span>
+<span id="cb128-10"><a href="#cb128-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb128-11"><a href="#cb128-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1 row containing non-finite outside the scale range
+(`stat_smooth()`).</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 1 row containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3.データ変換_files/figure-html/unnamed-chunk-61-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="slice_minのnに負の値を与えた結果" class="level3">
+<h3 class="anchored" data-anchor-id="slice_minのnに負の値を与えた結果">4.slice_min()のnに負の値を与えた結果</h3>
+<p>n = 1の場合<br>
+destごと、arr_delayの最小値を１つ抽出します。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
+<span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dest) <span class="sc">|&gt;</span></span>
+<span id="cb132-3"><a href="#cb132-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(arr_delay, <span class="at">n =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb132-4"><a href="#cb132-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(dest, arr_delay)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 115 × 19
+# Groups:   dest [105]
+   dest  arr_delay  year month   day dep_time sched_dep_time dep_delay arr_time
+   &lt;chr&gt;     &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+ 1 ABQ         -61  2013    11    13     1953           2000        -7     2202
+ 2 ACK         -25  2013     8    11      751            800        -9      844
+ 3 ALB         -34  2013     6    12      738            746        -8      823
+ 4 ANC         -47  2013     7    27     1617           1615         2     1906
+ 5 ATL         -49  2013     3     2     1951           2000        -9     2146
+ 6 AUS         -59  2013     8    27     2018           2029       -11     2232
+ 7 AVL         -29  2013     4    14      937            945        -8     1130
+ 8 AVL         -29  2013     5    19      925            935       -10     1122
+ 9 BDL         -43  2013     8    14     1133           1148       -15     1206
+10 BGR         -43  2013    12    31     1759           1805        -6     1903
+# ℹ 105 more rows
+# ℹ 10 more variables: sched_arr_time &lt;int&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;,
+#   tailnum &lt;chr&gt;, origin &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+</div>
+</div>
+<p>n = -1の場合<br>
+フィルタリングが働かず、全ての値が表示されます。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb134"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
+<span id="cb134-2"><a href="#cb134-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dest) <span class="sc">|&gt;</span></span>
+<span id="cb134-3"><a href="#cb134-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(arr_delay, <span class="at">n =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb134-4"><a href="#cb134-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(dest, arr_delay)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 336,762 × 19
+# Groups:   dest [103]
+   dest  arr_delay  year month   day dep_time sched_dep_time dep_delay arr_time
+   &lt;chr&gt;     &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+ 1 ABQ         -61  2013    11    13     1953           2000        -7     2202
+ 2 ABQ         -58  2013     5    14     1958           2001        -3     2210
+ 3 ABQ         -56  2013     6     4     1957           2001        -4     2212
+ 4 ABQ         -55  2013     5     4     1956           2001        -5     2213
+ 5 ABQ         -55  2013     8    25     1959           2007        -8     2204
+ 6 ABQ         -52  2013     8    24     2001           2007        -6     2207
+ 7 ABQ         -51  2013     8    27     1959           2007        -8     2208
+ 8 ABQ         -49  2013     6    15     1954           2001        -7     2219
+ 9 ABQ         -45  2013     5    17     1955           2001        -6     2223
+10 ABQ         -45  2013     7    12     2005           2007        -2     2214
+# ℹ 336,752 more rows
+# ℹ 10 more variables: sched_arr_time &lt;int&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;,
+#   tailnum &lt;chr&gt;, origin &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="count関数とsort引数" class="level3">
+<h3 class="anchored" data-anchor-id="count関数とsort引数">count関数とsort引数</h3>
+<p>sort = TRUEの場合: 出発地と目的地ごとにフライト数をカウントし、降順にソートされます。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb136"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
+<span id="cb136-2"><a href="#cb136-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(origin, dest, <span class="at">sort =</span> <span class="cn">TRUE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 224 × 3
+   origin dest      n
+   &lt;chr&gt;  &lt;chr&gt; &lt;int&gt;
+ 1 JFK    LAX   11262
+ 2 LGA    ATL   10263
+ 3 LGA    ORD    8857
+ 4 JFK    SFO    8204
+ 5 LGA    CLT    6168
+ 6 EWR    ORD    6100
+ 7 JFK    BOS    5898
+ 8 LGA    MIA    5781
+ 9 JFK    MCO    5464
+10 EWR    BOS    5327
+# ℹ 214 more rows</code></pre>
+</div>
+</div>
+<p>sort = FALSEの場合: 出発地と目的地ごとのフライト数をカウントし、アルファベット順（デフォルトの順序）で表示されます。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb138"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
+<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(origin, dest, <span class="at">sort =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 224 × 3
+   origin dest      n
+   &lt;chr&gt;  &lt;chr&gt; &lt;int&gt;
+ 1 EWR    ALB     439
+ 2 EWR    ANC       8
+ 3 EWR    ATL    5022
+ 4 EWR    AUS     968
+ 5 EWR    AVL     265
+ 6 EWR    BDL     443
+ 7 EWR    BNA    2336
+ 8 EWR    BOS    5327
+ 9 EWR    BQN     297
+10 EWR    BTV     931
+# ℹ 214 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="出力結果の検証" class="level3">
+<h3 class="anchored" data-anchor-id="出力結果の検証">6.出力結果の検証</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb140"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb140-2"><a href="#cb140-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,</span>
+<span id="cb140-3"><a href="#cb140-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>),</span>
+<span id="cb140-4"><a href="#cb140-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">z =</span> <span class="fu">c</span>(<span class="st">"K"</span>, <span class="st">"K"</span>, <span class="st">"L"</span>, <span class="st">"L"</span>, <span class="st">"K"</span>)</span>
+<span id="cb140-5"><a href="#cb140-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb140-6"><a href="#cb140-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb140-7"><a href="#cb140-7" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+      x y     z    
+  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+1     1 a     K    
+2     2 b     K    
+3     3 a     L    
+4     4 a     L    
+5     5 b     K    </code></pre>
+</div>
+</div>
+<p>データフレームがy列の値（“a” と “b”）に基づいてグループ化されます。<br>
+この時点では、実際の計算は行われず、データのグループ化情報が追加されます。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb142"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb142-2"><a href="#cb142-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+# Groups:   y [2]
+      x y     z    
+  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+1     1 a     K    
+2     2 b     K    
+3     3 a     L    
+4     4 a     L    
+5     5 b     K    </code></pre>
+</div>
+</div>
+<p>データフレームがy列の値（“a” と “b”）に基づいて並び替わります。<br>
+なお、降順にする場合はdesc()を用います。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb144"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb144-2"><a href="#cb144-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+      x y     z    
+  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+1     1 a     K    
+2     3 a     L    
+3     4 a     L    
+4     2 b     K    
+5     5 b     K    </code></pre>
+</div>
+</div>
+<p>データフレームがy列の値（“a” と “b”）に基づいてグループ化され、それぞれのグループに対するxの平均値が表示されます。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb146"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb146-2"><a href="#cb146-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(y)<span class="sc">|&gt;</span></span>
+<span id="cb146-3"><a href="#cb146-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">x =</span> <span class="fu">mean</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  y         x
+  &lt;chr&gt; &lt;dbl&gt;
+1 a      2.67
+2 b      3.5 </code></pre>
+</div>
+</div>
+<p>dfデータフレームをyとzの列でグループ化し、各グループのx列の平均を計算します。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb148"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb148-2"><a href="#cb148-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(y, z)<span class="sc">|&gt;</span></span>
+<span id="cb148-3"><a href="#cb148-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">x =</span> <span class="fu">mean</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'y'. You can override using the `.groups`
+argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+# Groups:   y [2]
+  y     z         x
+  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+1 a     K       1  
+2 a     L       3.5
+3 b     K       3.5</code></pre>
+</div>
+</div>
+<p>.groups = “drop”を指定することで、結果のデータフレームはグループが解除され、通常のデータフレームとして扱われます。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb151"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb151-2"><a href="#cb151-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(y, z)<span class="sc">|&gt;</span></span>
+<span id="cb151-3"><a href="#cb151-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">x =</span> <span class="fu">mean</span>(x), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  y     z         x
+  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+1 a     K       1  
+2 a     L       3.5
+3 b     K       3.5</code></pre>
+</div>
+</div>
+<p>グループ化された各組み合わせの平均が計算され、新しいデータフレームが返されます。<br>
+ここでは、グループの数だけの行が生成され、元のデータは集約されます。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb153"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb153-2"><a href="#cb153-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(y, z)<span class="sc">|&gt;</span></span>
+<span id="cb153-3"><a href="#cb153-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">x =</span> <span class="fu">mean</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'y'. You can override using the `.groups`
+argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+# Groups:   y [2]
+  y     z         x
+  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+1 a     K       1  
+2 a     L       3.5
+3 b     K       3.5</code></pre>
+</div>
+</div>
+<p>元のデータフレームに新しい列を追加し、各行に対してそのグループのxの平均を計算します。<br>
+元のデータの行数は変わらず、各グループの平均値が各行に反映されます。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(y, z)<span class="sc">|&gt;</span></span>
+<span id="cb156-3"><a href="#cb156-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> <span class="fu">mean</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+# Groups:   y, z [3]
+      x y     z    
+  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
+1   1   a     K    
+2   3.5 b     K    
+3   3.5 a     L    
+4   3.5 a     L    
+5   3.5 b     K    </code></pre>
+</div>
+</div>
+</section>
+<section id="集計とサンプルサイズ" class="level3">
+<h3 class="anchored" data-anchor-id="集計とサンプルサイズ">6.集計とサンプルサイズ</h3>
+<p>Lahmanパッケージの野球データでプレイヤーがヒット（H）した割合と打数（AB）を比較する。</p>
+<ul>
+<li>Lahman::Batting: LahmanパッケージのBattingデータセットを直接指定して使用。</li>
+<li>library(Lahman): Lahmanパッケージを読み込み、全ての関数やデータを使用可能にする。</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb158"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a>batters <span class="ot">&lt;-</span> Lahman<span class="sc">::</span>Batting <span class="sc">|&gt;</span></span>
+<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(playerID) <span class="sc">|&gt;</span></span>
+<span id="cb158-3"><a href="#cb158-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb158-4"><a href="#cb158-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">performance =</span> <span class="fu">sum</span>(H, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="fu">sum</span>(AB, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb158-5"><a href="#cb158-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">sum</span>(AB, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb158-6"><a href="#cb158-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb158-7"><a href="#cb158-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb158-8"><a href="#cb158-8" aria-hidden="true" tabindex="-1"></a>batters</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 20,730 × 3
+   playerID  performance     n
+   &lt;chr&gt;           &lt;dbl&gt; &lt;int&gt;
+ 1 aardsda01      0          4
+ 2 aaronha01      0.305  12364
+ 3 aaronto01      0.229    944
+ 4 aasedo01       0          5
+ 5 abadan01       0.0952    21
+ 6 abadfe01       0.111      9
+ 7 abadijo01      0.224     49
+ 8 abbated01      0.254   3044
+ 9 abbeybe01      0.169    225
+10 abbeych01      0.281   1756
+# ℹ 20,720 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb160"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a>batters <span class="sc">|&gt;</span></span>
+<span id="cb160-2"><a href="#cb160-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">100</span>) <span class="sc">|&gt;</span></span>
+<span id="cb160-3"><a href="#cb160-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> performance)) <span class="sc">+</span> </span>
+<span id="cb160-4"><a href="#cb160-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="dv">1</span><span class="sc">/</span> <span class="dv">10</span>) <span class="sc">+</span> </span>
+<span id="cb160-5"><a href="#cb160-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">se =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="3.データ変換_files/figure-html/unnamed-chunk-75-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>

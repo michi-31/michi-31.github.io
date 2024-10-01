@@ -342,10 +342,16 @@ flights |>
 ```
 
 
+# 4.パイプ: |>
+|> は一般的に「パイプ演算子」と呼ばれ、データをある関数の入力として渡すために使います。
 
-# 4.パイプ
-- 複数の関数と結合するときに力を発揮する。
-- 例：ヒューストンのIAH空港への最速便を見つけたい場合。
+- 関数の合成:  
+  一つの関数の出力を別の関数の入力として使うことができます。例えば、x |> f |> g は、g(f(x)) と同等です。
+
+- コードの可読性向上:  
+  パイプを使うことで、データの流れを視覚的に表現でき、読みやすくなることがあります。
+
+ヒューストンのIAH空港への最速便を見つける場合
 ```{r}
 flights |>
   filter(dest == "IAH") |>
@@ -356,14 +362,14 @@ flights |>
 
 # 5.グループ
 ### group_by()
-- データセットを分析のために意味のあるグループに分割する。
+データセットを意味のあるグループに分割します。
 ```{r}
 flights |>
   group_by(month)
 ```
 
 ### summarize()
-- グループ化した上で１つの要約統計量を計算する。
+グループ化した上で１つの要約統計量を計算します。
 ```{r}
 flights |>
   group_by(month) |>
@@ -371,7 +377,7 @@ flights |>
     avg_delay = mean(dep_delay)
   )
 ```
-- na.rm = TRUE: 欠損値を無視するように指示する。
+na.rm = TRUE: 欠損値を無視するように指示
 ```{r}
 flights |>
   group_by(month) |>
@@ -379,7 +385,7 @@ flights |>
     delay = mean(dep_delay, na.rm = TRUE)
   )
 ```
-- n = n(): 各グループの行数を返す。
+n = n(): 各グループの行数を返す
 ```{r}
 flights |>
   group_by(month) |>
@@ -390,21 +396,22 @@ flights |>
 ```
 
 ### slice()
-各グループ内で特定の行を抽出する。
+各グループ内で特定の行を抽出します。
 
-- 各グループの１行目をとる。
+例えば、各グループの１行目をとる場合、以下のように指定します。
 ```bash
 def |> slice_head(n = 1)
 ```
-- 例：目的地ごとに到着したときに最も遅れているフライトを検索する。
-- ただし、slice_max()は最大値を保持するため、n = 1には重複がある。
+
+目的地ごと、到着が最も遅れたフライトを検索します。  
+ただし、slice_max()は最大値を保持するため、n = 1には重複がある。
 ```{r}
 flights |>
   group_by(dest) |>
   slice_max(arr_delay, n = 1) |>
-  relocate(dest)
+  relocate(dest) # destを前に移動
 ```
-- with_ties = FALSE: グループごと１行だけ抽出する。
+with_ties = FALSE: グループごと１行だけ抽出
 ```{r}
 flights |>
   group_by(dest) |>
@@ -413,16 +420,20 @@ flights |>
 ```
 
 ### ungroup()
-- グループ化を解除する。
+グループ化を解除します。
+
+year, month, dayでグループ化を行い、dailyに格納します。
 ```{r}
 daily <- flights |>
   group_by(year, month, day)
 daily
 ```
+ungroup()関数でグループ化を解除します。
 ```{r}
 daily  |>
   ungroup()
 ```
+グループ化されていないデータフレームを要約すると、すべての行を１つのグループに属するものとして扱います。
 ```{r}
 daily |>
   ungroup()  |>
@@ -433,19 +444,178 @@ daily |>
 ```
 
 ### .by
+.by引数を用いたグループ化の方法もあります。
+
 ```{r}
 flights |>
   summarize(
     delay = mean(dep_delay, na.rm = TRUE),
     n = n(),
-    .by = month
+    .by = month # monthでグループ化
   )
+```
+
+複数の変数でグループ化する場合はベクトルを用います。
+```{r}
+flights |>
+  summarize(
+    delay = mean(dep_delay, na.rm = TRUE),
+    n = n(),
+    .by = c(origin, dest) # originとdestでグループ化
+  )
+```
+
+# 練習問題
+### 1.平均遅延が最悪な航空会社を確認する
+```{r}
+  flights |>
+    group_by(carrier, dest) |>
+    summarize(
+      delay = mean(arr_delay, na.rm = TRUE),
+      n = n()
+    ) |>
+    arrange(desc(delay))
 ```
 ```{r}
 flights |>
   summarize(
-    delay = mean(dep_delay, na.rm = TRUE),
+    delay = mean(arr_delay, na.rm = TRUE),
     n = n(),
-    .by = c(origin, dest)
+    .by = c(carrier, dest)
+  ) |>
+  arrange(desc(delay))
+```
+
+### 2.目的地ごとに、出発時に最も遅延した便
+```{r}
+flights |>
+  group_by(dest) |>
+  slice_max(dep_delay, n = 1) |>
+  relocate(dest)
+```
+
+### 3.１日の遅延の変化
+時間帯ごとの平均到着遅延時間を確認したところ、時間帯が遅くなるにつれて、遅延が増えることがわかりました。
+```{r}
+flights_hour <-
+  flights |>
+    group_by(hour) |>
+    summarize(
+      avg_delay = mean(arr_delay, na.rm = TRUE)
+    ) |>
+    ungroup()
+
+ggplot(flights_hour, aes(x = hour, y = avg_delay)) +
+  geom_point() + 
+  geom_smooth(method = "loess")
+```
+
+### 4.slice_min()のnに負の値を与えた結果
+
+n = 1の場合  
+destごと、arr_delayの最小値を１つ抽出します。
+```{r}
+flights |>
+  group_by(dest) |>
+  slice_min(arr_delay, n = 1) |>
+  relocate(dest, arr_delay)
+```
+n = -1の場合  
+フィルタリングが働かず、全ての値が表示されます。
+```{r}
+flights |>
+  group_by(dest) |>
+  slice_min(arr_delay, n = -1) |>
+  relocate(dest, arr_delay)
+```
+
+### count関数とsort引数
+sort = TRUEの場合: 出発地と目的地ごとにフライト数をカウントし、降順にソートされます。
+```{r}
+flights |>
+  count(origin, dest, sort = TRUE) 
+```
+sort = FALSEの場合: 出発地と目的地ごとのフライト数をカウントし、アルファベット順（デフォルトの順序）で表示されます。
+```{r}
+flights |>
+  count(origin, dest, sort = FALSE) 
+```
+
+### 6.出力結果の検証
+```{r}
+df <- tibble(
+  x = 1:5,
+  y = c("a", "b", "a", "a", "b"),
+  z = c("K", "K", "L", "L", "K")
+)
+  
+df
+```
+データフレームがy列の値（"a" と "b"）に基づいてグループ化されます。  
+この時点では、実際の計算は行われず、データのグループ化情報が追加されます。
+```{r}
+df |>
+  group_by(y)
+```
+データフレームがy列の値（"a" と "b"）に基づいて並び替わります。  
+なお、降順にする場合はdesc()を用います。 
+```{r}
+df |>
+  arrange(y)
+```
+データフレームがy列の値（"a" と "b"）に基づいてグループ化され、それぞれのグループに対するxの平均値が表示されます。 
+```{r}
+df |>
+  group_by(y)|>
+  summarize(x = mean(x))
+```
+dfデータフレームをyとzの列でグループ化し、各グループのx列の平均を計算します。
+```{r}
+df |>
+  group_by(y, z)|>
+  summarize(x = mean(x))
+```
+.groups = "drop"を指定することで、結果のデータフレームはグループが解除され、通常のデータフレームとして扱われます。
+```{r}
+df |>
+  group_by(y, z)|>
+  summarize(x = mean(x), .groups = "drop")
+```
+グループ化された各組み合わせの平均が計算され、新しいデータフレームが返されます。  
+ここでは、グループの数だけの行が生成され、元のデータは集約されます。
+```{r}
+df |>
+  group_by(y, z)|>
+  summarize(x = mean(x))
+```
+元のデータフレームに新しい列を追加し、各行に対してそのグループのxの平均を計算します。  
+元のデータの行数は変わらず、各グループの平均値が各行に反映されます。
+```{r}
+df |>
+  group_by(y, z)|>
+  mutate(x = mean(x))
+```
+
+### 6.集計とサンプルサイズ
+Lahmanパッケージの野球データでプレイヤーがヒット（H）した割合と打数（AB）を比較する。
+
+- Lahman::Batting: LahmanパッケージのBattingデータセットを直接指定して使用。
+- library(Lahman): Lahmanパッケージを読み込み、全ての関数やデータを使用可能にする。
+
+```{r}
+batters <- Lahman::Batting |>
+  group_by(playerID) |>
+  summarize(
+    performance = sum(H, na.rm = TRUE) / sum(AB, na.rm = TRUE),
+    n = sum(AB, na.rm = TRUE)
   )
+
+batters
+```
+```{r}
+batters |>
+  filter(n > 100) |>
+  ggplot(aes(x = n, y = performance)) + 
+  geom_point(alpha = 1/ 10) + 
+  geom_smooth(se = FALSE)
 ```

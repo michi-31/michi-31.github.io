@@ -1,0 +1,33 @@
+{
+	"folders": [
+		{
+			"name": "00_memo",
+			"path": "../../00_memo"
+		},
+		{
+			"name": "01_pp",
+			"path": "../../01_pp"
+		},
+		{
+			"name": "99_homepage",
+			"path": ".."
+		},
+		{
+			"name": "01_R",
+			"path": "../../../01_R"
+		},
+		{
+			"name": "02_python",
+			"path": "../../../02_python"
+		},
+		{
+			"name": "03_vscode",
+			"path": "../../../03_vscode"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true,
+		"quarto.path": "C:/Users/harad/AppData/Local/Programs/Quarto/bin",
+		"quarto.render.renderOnSave": true
+	}
+}
