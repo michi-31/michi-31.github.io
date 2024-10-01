@@ -497,15 +497,12 @@ flights |>
 ### 3.１日の遅延の変化
 時間帯ごとの平均到着遅延時間を確認したところ、時間帯が遅くなるにつれて、遅延が増えることがわかりました。
 ```{r}
-flights_hour <-
-  flights |>
-    group_by(hour) |>
-    summarize(
-      avg_delay = mean(arr_delay, na.rm = TRUE)
-    ) |>
-    ungroup()
-
-ggplot(flights_hour, aes(x = hour, y = avg_delay)) +
+flights |>
+  group_by(hour) |>
+  summarize(
+    avg_delay = mean(arr_delay, na.rm = TRUE)
+  ) |>
+  ggplot(aes(x = hour, y = avg_delay)) +
   geom_point() + 
   geom_smooth(method = "loess")
 ```
