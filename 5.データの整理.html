@@ -89,6 +89,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#ピボットの仕組み" id="toc-ピボットの仕組み" class="nav-link" data-scroll-target="#ピボットの仕組み">ピボットの仕組み</a></li>
   </ul></li>
+  <li><a href="#データを広げる" id="toc-データを広げる" class="nav-link" data-scroll-target="#データを広げる">4.データを広げる</a>
+  <ul class="collapse">
+  <li><a href="#pivot_widerの仕組み" id="toc-pivot_widerの仕組み" class="nav-link" data-scroll-target="#pivot_widerの仕組み">pivot_wider()の仕組み</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -394,6 +398,223 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 4 B     bp2           115
 5 C     bp1           120
 6 C     bp2           125</code></pre>
+</div>
+</div>
+<p>世界保健機関によって収集されたデータセットwho2を用いて、データをロング形式に変換します。</p>
+<p>新しいデータセットには、国と年、診断方法、性別、年齢層、患者数の６つの変数を持たせます。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(who2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 58
+  country      year sp_m_014 sp_m_1524 sp_m_2534 sp_m_3544 sp_m_4554 sp_m_5564
+  &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 Afghanistan  1980       NA        NA        NA        NA        NA        NA
+2 Afghanistan  1981       NA        NA        NA        NA        NA        NA
+3 Afghanistan  1982       NA        NA        NA        NA        NA        NA
+4 Afghanistan  1983       NA        NA        NA        NA        NA        NA
+5 Afghanistan  1984       NA        NA        NA        NA        NA        NA
+6 Afghanistan  1985       NA        NA        NA        NA        NA        NA
+# ℹ 50 more variables: sp_m_65 &lt;dbl&gt;, sp_f_014 &lt;dbl&gt;, sp_f_1524 &lt;dbl&gt;,
+#   sp_f_2534 &lt;dbl&gt;, sp_f_3544 &lt;dbl&gt;, sp_f_4554 &lt;dbl&gt;, sp_f_5564 &lt;dbl&gt;,
+#   sp_f_65 &lt;dbl&gt;, sn_m_014 &lt;dbl&gt;, sn_m_1524 &lt;dbl&gt;, sn_m_2534 &lt;dbl&gt;,
+#   sn_m_3544 &lt;dbl&gt;, sn_m_4554 &lt;dbl&gt;, sn_m_5564 &lt;dbl&gt;, sn_m_65 &lt;dbl&gt;,
+#   sn_f_014 &lt;dbl&gt;, sn_f_1524 &lt;dbl&gt;, sn_f_2534 &lt;dbl&gt;, sn_f_3544 &lt;dbl&gt;,
+#   sn_f_4554 &lt;dbl&gt;, sn_f_5564 &lt;dbl&gt;, sn_f_65 &lt;dbl&gt;, ep_m_014 &lt;dbl&gt;,
+#   ep_m_1524 &lt;dbl&gt;, ep_m_2534 &lt;dbl&gt;, ep_m_3544 &lt;dbl&gt;, ep_m_4554 &lt;dbl&gt;, …</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>who2 <span class="sc">|&gt;</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">!</span>(country<span class="sc">:</span>year),</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"diagnosis"</span>, <span class="st">"gender"</span>, <span class="st">"age"</span>),</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">"_"</span>,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"count"</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 405,440 × 6
+   country      year diagnosis gender age   count
+   &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;
+ 1 Afghanistan  1980 sp        m      014      NA
+ 2 Afghanistan  1980 sp        m      1524     NA
+ 3 Afghanistan  1980 sp        m      2534     NA
+ 4 Afghanistan  1980 sp        m      3544     NA
+ 5 Afghanistan  1980 sp        m      4554     NA
+ 6 Afghanistan  1980 sp        m      5564     NA
+ 7 Afghanistan  1980 sp        m      65       NA
+ 8 Afghanistan  1980 sp        f      014      NA
+ 9 Afghanistan  1980 sp        f      1524     NA
+10 Afghanistan  1980 sp        f      2534     NA
+# ℹ 405,430 more rows</code></pre>
+</div>
+</div>
+<p>５つの家族に関するデータが含まれているデータセットhouseholdを用いて、データをロング形式に変換します。</p>
+<p>列名に２つの変数名（dob, name）と他の値があるため、names_to = で”.value”を設定し、２つの構成要素に分割します。 なお、子供が１人だけの場合など処理によって欠落した変数が作成されるため、values_drop_na = TRUEで欠損値を取り除きます。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(household)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 5
+  family dob_child1 dob_child2 name_child1 name_child2
+   &lt;int&gt; &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;       &lt;chr&gt;      
+1      1 1998-11-26 2000-01-29 Susan       Jose       
+2      2 1996-06-22 NA         Mark        &lt;NA&gt;       
+3      3 2002-07-11 2004-04-05 Sam         Seth       
+4      4 2004-10-10 2009-08-27 Craig       Khai       
+5      5 2000-12-05 2005-02-28 Parker      Gracie     </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>household <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">!</span>family,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"chiled"</span>),</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">"_"</span>,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_drop_na =</span> <span class="cn">TRUE</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 4
+  family chiled dob        name  
+   &lt;int&gt; &lt;chr&gt;  &lt;date&gt;     &lt;chr&gt; 
+1      1 child1 1998-11-26 Susan 
+2      1 child2 2000-01-29 Jose  
+3      2 child1 1996-06-22 Mark  
+4      3 child1 2002-07-11 Sam   
+5      3 child2 2004-04-05 Seth  
+6      4 child1 2004-10-10 Craig 
+7      4 child2 2009-08-27 Khai  
+8      5 child1 2000-12-05 Parker
+9      5 child2 2005-02-28 Gracie</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="データを広げる" class="level1">
+<h1>4.データを広げる</h1>
+<p>pivoto_wider()を用いて、１つの観測が複数の行に分割されている場合を考えます。</p>
+<p>米国のCMSから患者の経験に関するデータを収集したデータセットを使います。</p>
+<p>distinct(measure_cd, measure_title)で、ユニークな組み合わせを表示します。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cms_patient_experience)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+  org_pac_id org_nm                     measure_cd   measure_title      prf_rate
+  &lt;chr&gt;      &lt;chr&gt;                      &lt;chr&gt;        &lt;chr&gt;                 &lt;dbl&gt;
+1 0446157747 USC CARE MEDICAL GROUP INC CAHPS_GRP_1  CAHPS for MIPS SS…       63
+2 0446157747 USC CARE MEDICAL GROUP INC CAHPS_GRP_2  CAHPS for MIPS SS…       87
+3 0446157747 USC CARE MEDICAL GROUP INC CAHPS_GRP_3  CAHPS for MIPS SS…       86
+4 0446157747 USC CARE MEDICAL GROUP INC CAHPS_GRP_5  CAHPS for MIPS SS…       57
+5 0446157747 USC CARE MEDICAL GROUP INC CAHPS_GRP_8  CAHPS for MIPS SS…       85
+6 0446157747 USC CARE MEDICAL GROUP INC CAHPS_GRP_12 CAHPS for MIPS SS…       24</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>cms_patient_experience<span class="sc">|&gt;</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(measure_cd, measure_title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  measure_cd   measure_title                                                    
+  &lt;chr&gt;        &lt;chr&gt;                                                            
+1 CAHPS_GRP_1  CAHPS for MIPS SSM: Getting Timely Care, Appointments, and Infor…
+2 CAHPS_GRP_2  CAHPS for MIPS SSM: How Well Providers Communicate               
+3 CAHPS_GRP_3  CAHPS for MIPS SSM: Patient's Rating of Provider                 
+4 CAHPS_GRP_5  CAHPS for MIPS SSM: Health Promotion and Education               
+5 CAHPS_GRP_8  CAHPS for MIPS SSM: Courteous and Helpful Office Staff           
+6 CAHPS_GRP_12 CAHPS for MIPS SSM: Stewardship of Patient Resources             </code></pre>
+</div>
+</div>
+<ul>
+<li>pivot_wider(): データをロング形式からワイド形式に変換します。
+<ul>
+<li>id_cols = starts_with(“org”): “org” で始まる識別子列を指定します。これらの列はピボット後もそのまま残ります。</li>
+<li>names_from = measure_cd: measure_cd 列の値が新しい列名になります。</li>
+<li>values_from = prf_rate: 新しい列に入る値は prf_rate 列から取得します</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>cms_patient_experience<span class="sc">|&gt;</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">id_cols =</span> <span class="fu">starts_with</span>(<span class="st">"org"</span>),</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> measure_cd,</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> prf_rate</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 95 × 8
+   org_pac_id org_nm CAHPS_GRP_1 CAHPS_GRP_2 CAHPS_GRP_3 CAHPS_GRP_5 CAHPS_GRP_8
+   &lt;chr&gt;      &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+ 1 0446157747 USC C…          63          87          86          57          85
+ 2 0446162697 ASSOC…          59          85          83          63          88
+ 3 0547164295 BEAVE…          49          NA          75          44          73
+ 4 0749333730 CAPE …          67          84          85          65          82
+ 5 0840104360 ALLIA…          66          87          87          64          87
+ 6 0840109864 REX H…          73          87          84          67          91
+ 7 0840513552 SCL H…          58          83          76          58          78
+ 8 0941545784 GRITM…          46          86          81          54          NA
+ 9 1052612785 COMMU…          65          84          80          58          87
+10 1254237779 OUR L…          61          NA          NA          65          NA
+# ℹ 85 more rows
+# ℹ 1 more variable: CAHPS_GRP_12 &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<section id="pivot_widerの仕組み" class="level3">
+<h3 class="anchored" data-anchor-id="pivot_widerの仕組み">pivot_wider()の仕組み</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>id,  <span class="sc">~</span>measurement,  <span class="sc">~</span>value,</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"A"</span>,         <span class="st">"bp1"</span>,     <span class="dv">100</span>,  </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"B"</span>,         <span class="st">"bp1"</span>,     <span class="dv">140</span>,</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"B"</span>,         <span class="st">"bp2"</span>,     <span class="dv">115</span>,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"A"</span>,         <span class="st">"bp2"</span>,     <span class="dv">120</span>,  </span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"A"</span>,         <span class="st">"bp3"</span>,     <span class="dv">105</span> </span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  id      bp1   bp2
+  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 A       100   120
+2 B       140   115
+3 C       120   125</code></pre>
+</div>
+</div>
+<p>value列から値を取り出して、measurement列から列名を取得します。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="sc">|&gt;</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> measurement,</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> value</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 4
+  id      bp1   bp2   bp3
+  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 A       100   120   105
+2 B       140   115    NA</code></pre>
+</div>
+</div>
+<p>新しい列名は、measurementの一意の値になります。</p>
+<ul>
+<li>distinct(measurement): ここで、measurement 列のユニークな値を取得します。</li>
+<li>pull(): これにより、measurement 列の値がベクトルとして返されます。</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="sc">|&gt;</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(measurement) <span class="sc">|&gt;</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "bp1" "bp2" "bp3"</code></pre>
+</div>
+</div>
+<ul>
+<li>select(-measurement, -value): measurement 列と value 列を削除します。</li>
+<li>distinct(): 重複を排除します。</li>
+<li>mutate(x = NA, y = NA, z = NA): 新しい列 x, y, z を追加し、すべての値を NA で初期化します。</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="sc">|&gt;</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>measurement, <span class="sc">-</span>value) <span class="sc">|&gt;</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> <span class="cn">NA</span>, <span class="at">y =</span> <span class="cn">NA</span>, <span class="at">z =</span> <span class="cn">NA</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 4
+  id    x     y     z    
+  &lt;chr&gt; &lt;lgl&gt; &lt;lgl&gt; &lt;lgl&gt;
+1 A     NA    NA    NA   
+2 B     NA    NA    NA   </code></pre>
 </div>
 </div>
 </section>

@@ -130,12 +130,12 @@ df |>
   )
 ```
 
-世界保健機関によって収集されたデータセットwho2を用いて、データをロング形式に変換します。
-```{r}
-head(who2)
-```
+世界保健機関によって収集されたデータセットwho2を用いて、データをロング形式に変換します。  
+
 新しいデータセットには、国と年、診断方法、性別、年齢層、患者数の６つの変数を持たせます。
 ```{r}
+head(who2)
+
 who2 |>
   pivot_longer(
     cols = !(country:year),
@@ -143,4 +143,88 @@ who2 |>
     names_sep = "_",
     values_to = "count"
   )
+```
+
+５つの家族に関するデータが含まれているデータセットhouseholdを用いて、データをロング形式に変換します。  
+
+列名に２つの変数名（dob, name）と他の値があるため、names_to = で".value"を設定し、２つの構成要素に分割します。
+なお、子供が１人だけの場合など処理によって欠落した変数が作成されるため、values_drop_na = TRUEで欠損値を取り除きます。
+```{r}
+head(household)
+
+household |>
+  pivot_longer(
+    cols = !family,
+    names_to = c(".value", "chiled"),
+    names_sep = "_",
+    values_drop_na = TRUE
+  )
+```
+
+# 4.データを広げる
+pivoto_wider()を用いて、１つの観測が複数の行に分割されている場合を考えます。  
+
+米国のCMSから患者の経験に関するデータを収集したデータセットを使います。  
+
+distinct(measure_cd, measure_title)で、ユニークな組み合わせを表示します。
+```{r}
+head(cms_patient_experience)
+
+cms_patient_experience|>
+  distinct(measure_cd, measure_title)
+```
+- pivot_wider(): データをロング形式からワイド形式に変換します。
+  - id_cols = starts_with("org"): "org" で始まる識別子列を指定します。これらの列はピボット後もそのまま残ります。
+  - names_from = measure_cd: measure_cd 列の値が新しい列名になります。
+  - values_from = prf_rate: 新しい列に入る値は prf_rate 列から取得します
+```{r}
+cms_patient_experience|>
+  pivot_wider(
+    id_cols = starts_with("org"),
+    names_from = measure_cd,
+    values_from = prf_rate
+  )
+```
+
+### pivot_wider()の仕組み
+
+```{r}
+df2 <- tribble(
+    ~id,  ~measurement,  ~value,
+    "A",         "bp1",     100,  
+    "B",         "bp1",     140,
+    "B",         "bp2",     115,
+    "A",         "bp2",     120,  
+    "A",         "bp3",     105 
+)
+
+df
+```
+
+value列から値を取り出して、measurement列から列名を取得します。
+```{r}
+df2 |>
+  pivot_wider(
+    names_from = measurement,
+    values_from = value
+  )
+```
+
+新しい列名は、measurementの一意の値になります。
+
+- distinct(measurement): ここで、measurement 列のユニークな値を取得します。
+- pull(): これにより、measurement 列の値がベクトルとして返されます。
+```{r}
+df2 |>
+  distinct(measurement) |>
+  pull()
+```
+- select(-measurement, -value): measurement 列と value 列を削除します。
+- distinct(): 重複を排除します。
+- mutate(x = NA, y = NA, z = NA): 新しい列 x, y, z を追加し、すべての値を NA で初期化します。
+```{r}
+df2 |>
+  select(-measurement, -value) |>
+  distinct() |>
+  mutate(x = NA, y = NA, z = NA)
 ```
