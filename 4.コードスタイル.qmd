@@ -1,5 +1,5 @@
 ---
-title: "3.コードスタイル"
+title: "4.コードスタイル"
 date: "2024-10-01"
 execute: 
   error: true
@@ -48,7 +48,7 @@ flights |> # 以降の行はスペース２つでインデント
   )
 ```
 
-パイプラインが1行に収まる場合は、規則を省略しても問題ないです。
+パイプラインが1行に収まる場合は、規則を省略しても問題ありません。
 ```markdown
 # １行に収める場合
 df |> mutate(y = x + 1)
@@ -61,3 +61,37 @@ df |>
 
 ```
 
+# 4.ggplot2
+ggplot2にも同様の規則が適用されます。  
+ただし、演算子が|>から＋に変わる点に注意してください。
+
+# 5.区切りコメント
+スクリプトが長くなる場合、必要に応じて区切りコメントを使用します。
+```markdown
+# Load data -----------------------------
+```
+
+# 練習問題
+```markdown
+flights |> 
+  filter(dest == "IAH") |>
+  group_by(year, month, day) |>
+  summarize(
+    delay = mean(arr_delay, na.rm = TRUE),
+    n = n()
+  ) |>
+  filter(n > 10)
+```
+```markdown
+flights |> 
+  filter(carrier == "UA",
+         dest %in% c("IAH", "HOH"),
+         sched_dep_time > 0900,
+         sched_arr_time < 2000) |>
+  group_by(flight) |>
+  summarize(
+    delay = mean(arr_delay, na.rm = TRUE),
+    n = n()
+  ) |>
+  filter(n > 10)
+```

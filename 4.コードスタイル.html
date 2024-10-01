@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-09-30">
+<meta name="dcterms.date" content="2024-10-01">
 
-<title>0.Rについて</title>
+<title>4.コードスタイル</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,19 +21,53 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="0.R_files/libs/clipboard/clipboard.min.js"></script>
-<script src="0.R_files/libs/quarto-html/quarto.js"></script>
-<script src="0.R_files/libs/quarto-html/popper.min.js"></script>
-<script src="0.R_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="0.R_files/libs/quarto-html/anchor.min.js"></script>
-<link href="0.R_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="0.R_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="0.R_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="0.R_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="0.R_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="4.コードスタイル_files/libs/clipboard/clipboard.min.js"></script>
+<script src="4.コードスタイル_files/libs/quarto-html/quarto.js"></script>
+<script src="4.コードスタイル_files/libs/quarto-html/popper.min.js"></script>
+<script src="4.コードスタイル_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="4.コードスタイル_files/libs/quarto-html/anchor.min.js"></script>
+<link href="4.コードスタイル_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="4.コードスタイル_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="4.コードスタイル_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="4.コードスタイル_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="4.コードスタイル_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -46,16 +80,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#目的" id="toc-目的" class="nav-link active" data-scroll-target="#目的">目的</a></li>
-  <li><a href="#r言語とは" id="toc-r言語とは" class="nav-link" data-scroll-target="#r言語とは">1.R言語とは</a></li>
-  <li><a href="#r言語でできること" id="toc-r言語でできること" class="nav-link" data-scroll-target="#r言語でできること">2.R言語でできること</a></li>
-  <li><a href="#他の言語との違い" id="toc-他の言語との違い" class="nav-link" data-scroll-target="#他の言語との違い">3.他の言語との違い</a></li>
-  <li><a href="#rとrstudio" id="toc-rとrstudio" class="nav-link" data-scroll-target="#rとrstudio">4.RとRStudio</a>
+  <li><a href="#目的" id="toc-目的" class="nav-link active" data-scroll-target="#目的">目的</a>
   <ul class="collapse">
-  <li><a href="#r" id="toc-r" class="nav-link" data-scroll-target="#r">R</a></li>
-  <li><a href="#rstudio" id="toc-rstudio" class="nav-link" data-scroll-target="#rstudio">RStudio</a></li>
+  <li><a href="#準備" id="toc-準備" class="nav-link" data-scroll-target="#準備">準備</a></li>
   </ul></li>
-  <li><a href="#参考" id="toc-参考" class="nav-link" data-scroll-target="#参考">参考</a></li>
+  <li><a href="#名前" id="toc-名前" class="nav-link" data-scroll-target="#名前">1.名前</a></li>
+  <li><a href="#スペース" id="toc-スペース" class="nav-link" data-scroll-target="#スペース">2.スペース</a></li>
+  <li><a href="#パイプ" id="toc-パイプ" class="nav-link" data-scroll-target="#パイプ">3.パイプ</a></li>
+  <li><a href="#ggplot2" id="toc-ggplot2" class="nav-link" data-scroll-target="#ggplot2">4.ggplot2</a></li>
+  <li><a href="#区切りコメント" id="toc-区切りコメント" class="nav-link" data-scroll-target="#区切りコメント">5.区切りコメント</a></li>
+  <li><a href="#練習問題" id="toc-練習問題" class="nav-link" data-scroll-target="#練習問題">練習問題</a></li>
   </ul>
 </nav>
 </div>
@@ -63,7 +97,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">0.Rについて</h1>
+<h1 class="title">4.コードスタイル</h1>
 </div>
 
 
@@ -74,7 +108,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 30, 2024</p>
+      <p class="date">October 1, 2024</p>
     </div>
   </div>
   
@@ -88,66 +122,94 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="目的" class="level1">
 <h1>目的</h1>
-<p>Rについて整理します。</p>
-</section>
-<section id="r言語とは" class="level1">
-<h1>1.R言語とは</h1>
-<p>Rは、統計解析とデータ分析に特化したオープンソースのプログラミング言語で、1990年代にニュージーランドのオークランド大学で開発されました。</p>
-<p>無料で利用でき、豊富な統計解析用パッケージが用意されています。</p>
-</section>
-<section id="r言語でできること" class="level1">
-<h1>2.R言語でできること</h1>
+<p>tidyverseスタイルガイドから、正しいコーディングスタイルを学びます。</p>
+<section id="準備" class="level3">
+<h3 class="anchored" data-anchor-id="準備">準備</h3>
 <ul>
-<li><p>統計解析:<br>
-各種の統計手法や検定を簡単に実行できます。<br>
-回帰分析や分散分析など、多岐にわたる手法がサポートされています。</p></li>
-<li><p>データ可視化:<br>
-ggplot2や latticeなどのパッケージを使って、美しいグラフやチャートを作成できます。<br>
-データの理解を助けるための視覚化が容易です。</p></li>
-<li><p>機械学習:<br>
-caretや randomForestなどのライブラリを活用して、分類、回帰、クラスタリングなどの機械学習アルゴリズムを実装できます。</p></li>
-<li><p>テキストマイニング:<br>
-自然言語処理の技術を用いて、テキストデータの分析や可視化が行えます。</p></li>
-<li><p>金融分析:<br>
-リスクモデリングやポートフォリオ管理のための分析が可能で、金融データの取り扱いに特化したパッケージも豊富です。</p></li>
+<li>dplyer（ディープライ）パッケージ: ggplot2と同様、tidyverseのコアメンバー</li>
+<li>nycflights13: 2013年にニューヨーク市を出発した336,776便のフライトについてのデータセット</li>
 </ul>
-</section>
-<section id="他の言語との違い" class="level1">
-<h1>3.他の言語との違い</h1>
-<ul>
-<li><p>統計解析に特化:<br>
-Rは統計解析のために設計された言語であり、豊富な統計パッケージが存在します。<br>
-一方、PythonやMATLABなども統計解析が可能ですが、Rの方が専門性が高いです。</p></li>
-<li><p>データ可視化の強さ:<br>
-Rの可視化ライブラリは非常に強力で、多彩なグラフを簡単に作成できます。特にggplot2は高い人気を誇ります。<br>
-PythonのMatplotlibやSeabornも優れていますが、Rは直感的な文法を持っています。</p></li>
-<li><p>大規模データの扱い:<br>
-Rは大規模データを扱う際の処理速度が他の言語に比べて遅いことがあります。<br>
-PythonやJavaなどは効率的なデータ処理に優れています。</p></li>
-<li><p>オープンソースコミュニティ:<br>
-Rは活発なオープンソースコミュニティが存在し、多くのユーザーによってパッケージが作成・維持されています。<br>
-他の言語でもコミュニティはありますが、Rの統計分野に特化したものは特に強力です。</p></li>
-</ul>
-</section>
-<section id="rとrstudio" class="level1">
-<h1>4.RとRStudio</h1>
-<section id="r" class="level3">
-<h3 class="anchored" data-anchor-id="r">R</h3>
-<p>RはCRAN（Comprehensive R Archive Network）からダウンロードできます。</p>
-<p><a href="https://cloud.r-project.org/">CRANからダウンロード</a></p>
-</section>
-<section id="rstudio" class="level3">
-<h3 class="anchored" data-anchor-id="rstudio">RStudio</h3>
-<p>RStudioは、Rをより快適に使用するための統合開発環境（IDE）です。公式サイトからダウンロードできます。</p>
-<p><a href="https://posit.co/downloads/">RStudioのダウンロード</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+</div>
 </section>
 </section>
-<section id="参考" class="level1">
-<h1>参考</h1>
-<ul>
-<li><a href="https://products.sint.co.jp/topsic/blog/r-language-overview">R言語とは？何ができる言語なのか、Pythonとの違いについても解説</a></li>
-<li><a href="https://zenn.dev/masayukeeeee/articles/96c7832de4dc40">【初心者向け】RとRStudioのダウンロード・インストール 2023年10月版</a></li>
-</ul>
+<section id="名前" class="level1">
+<h1>1.名前</h1>
+<p>変数の名前は英小文字、数字、_（アンダーバー）のみを使用します。</p>
+<p>また、名前内の単語の区切りは_を使用します。 名前は、長くても理解しやすい方がよいと考えられています。</p>
+</section>
+<section id="スペース" class="level1">
+<h1>2.スペース</h1>
+<p>^以外の算術演算子の両端と代入演算子の前後にはスペースを入れます。</p>
+<p>また、カンマの後にもスペースを入れます。</p>
+</section>
+<section id="パイプ" class="level1">
+<h1>3.パイプ</h1>
+<p>|&gt;は前にスペースを入れ、行の最後に置きます。<br>
+また、パイプラインの最初のステップの後、各行を２つのスペースでインデントします。</p>
+<p>パイプ先に名前付きの引数がある場合は、引数を新しい行に配置します。<br>
+関数に名前付きの引数がない場合は、すべて１行にします。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>flights |&gt; # 以降の行はスペース２つでインデント</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  group_by(tailnum) |&gt;</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  summarize(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    delay = mean(arr_delay, na.rm = TRUE),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    n = N() # 新しい行に配置</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>パイプラインが1行に収まる場合は、規則を省略しても問題ありません。</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># １行に収める場合</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df |&gt; mutate(y = x + 1)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu"># 規則に従う場合</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>df |&gt;</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  mutate(</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    y = x + 1</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="ggplot2" class="level1">
+<h1>4.ggplot2</h1>
+<p>ggplot2にも同様の規則が適用されます。<br>
+ただし、演算子が|&gt;から＋に変わる点に注意してください。</p>
+</section>
+<section id="区切りコメント" class="level1">
+<h1>5.区切りコメント</h1>
+<p>スクリプトが長くなる場合、必要に応じて区切りコメントを使用します。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Load data -----------------------------</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="練習問題" class="level1">
+<h1>練習問題</h1>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>flights |&gt; </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  filter(dest == "IAH") |&gt;</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  group_by(year, month, day) |&gt;</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  summarize(</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    delay = mean(arr_delay, na.rm = TRUE),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    n = n()</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  ) |&gt;</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  filter(n &gt; 10)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>flights |&gt; </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  filter(carrier == "UA",</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>         dest %in% c("IAH", "HOH"),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>         sched_dep_time &gt; 0900,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>         sched_arr_time &lt; 2000) |&gt;</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  group_by(flight) |&gt;</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  summarize(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    delay = mean(arr_delay, na.rm = TRUE),</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    n = n()</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  ) |&gt;</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  filter(n &gt; 10)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 
 </main>

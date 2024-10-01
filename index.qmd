@@ -2,6 +2,7 @@
 title: "R、Pythonを用いた統計分析等について"
 date: "2024-09-"
 execute: 
+  error: true
   cache: true
 format:
   html: 
@@ -30,10 +31,12 @@ GitHubの基本的な使い方を整理します。
 ## 2. R {#2-r}
 Rの基本的な使い方を整理します。
 
-- [0.R](0.R.html)
+- [0.Rについて](0.R.html)
 - [1.データの可視化](1.データの可視化.html)
 - [2.基本](2.基本.html)
 - [3.データ変換](3.データ変換.html)
+- [4.コードスタイル](4.コードスタイル.html)
+- [5.データの整理](5.データの整理.html)
 
 ### 参考文献
 - Rではじめるデータサイエンス  [Amazonで見る](https://www.amazon.co.jp/R%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%82%B5%E3%82%A4%E3%82%A8%E3%83%B3%E3%82%B9-Hadley-Wickham/dp/487311814X)

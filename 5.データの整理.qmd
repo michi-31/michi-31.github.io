@@ -1,0 +1,146 @@
+---
+title: "5.データの整理"
+date: "2024-10-01"
+execute: 
+  error: true
+  cache: true
+format:
+  html: 
+    slide-level: 2
+    toc: true
+---
+
+# 目的
+整理データ（tidy data）と呼ばれるシステムを使ってデータの整理方法を学びます。 
+
+# 1.準備
+データ整理のツールtidyrを使用するため、tidyverseをロードします。
+```{r}
+library(tidyverse)
+```
+# 練習問題
+# 1.データセットの行列を調べる
+```{r}
+glimpse(table1)
+glimpse(table2)
+glimpse(table3)
+```
+# 2.table2, table3についてrateを計算する
+
+```{r}
+table1 |>
+  mutate(rate = cases / population * 10000)
+```
+- sapply(): リストやベクトルに対して関数を適用し、結果をベクトルや行列に変換する
+```{r}
+table2 |>
+  filter(type %in% c("cases", "population")) |>
+  group_by(country, year) |>
+  summarize(
+    total_cases = sum(count[type == "cases"]),
+    total_population = sum(count[type == "population"]),
+  ) |>
+  mutate(rate = (total_cases / total_population) * 10000)
+
+rate
+```
+
+```{r}
+table3 |>
+  mutate(
+    rate = sapply(rate,
+    function(x) eval(parse(text = x))) * 10000) |>
+  group_by(country, year)  
+```
+
+# 3.データを伸ばす
+2000年のビルボードの曲のランキングを記録したbillbordデータセットを用いて、列に変数、行に観測値を持つ整理した形式にデータを「ピボット」します。  
+
+ピボットとは、横持ち形式（ワイドフォーマット）のデータを縦持ち形式（ロングフォーマット）に展開することや、形式変換、集計を行う操作を指します（その逆も）。
+```{r}
+head(billboard)
+```
+- cols: ピボットする列（変数から除外する列）を指定する
+- names_to: 列に格納されている変数に名前を付ける
+- values_to:  値に格納されている変数に名前を付ける
+```{r}
+billboard |>
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    values_to = "rank"
+  )
+```
+pivot_longer()にvalue_drop_na = TRUEを設定して、欠損値を取り除くよう指定します。
+```{r}
+billboard |>
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    values_to = "rank",
+    values_drop_na = TRUE
+  )
+```
+mutate()とreadr::parse_number()を用いて、文字列を数値に変換します。
+```{r}
+billboard_longer <- billboard |>
+  pivot_longer(
+    cols = starts_with("wk"),
+    names_to = "week",
+    values_to = "rank",
+    values_drop_na = TRUE
+  ) |>
+   mutate(
+    week = parse_number(week)
+   )
+```
+
+曲のランキングが週の経過とともにどのように変化するのかを可視化します。
+
+scale_y_reverse()は、y軸を逆にするための関数です。  
+通常、ランキングは小さい値が上位（例えば1位）、大きい値が下位ですが、この関数を使うことで上位のランクが上に表示されます。
+```{r}
+billboard_longer |>
+  ggplot(aes(x = week, y = rank, group = track)) +
+  geom_line(alpha = 0.25) + 
+  scale_y_reverse()
+```
+
+### ピボットの仕組み
+
+idがA,B,Cの３人の患者がいて、それぞれの患者で２回の血圧測定を行うとします。  
+```{r}
+df <- tribble(
+    ~id,  ~bp1,  ~bp2,
+    "A",   100,   120,  
+    "B",   140,   115,
+    "C",   120,   125
+)
+
+df
+```
+
+新しいデータセットには、id, measurement（列）, value（値）の３つの変数を持たせます。
+```{r}
+df |>
+  pivot_longer(
+    cols = bp1:bp2,
+    names_to = "measurement",
+    values_to = "value"
+  )
+```
+
+世界保健機関によって収集されたデータセットwho2を用いて、データをロング形式に変換します。
+```{r}
+head(who2)
+```
+新しいデータセットには、国と年、診断方法、性別、年齢層、患者数の６つの変数を持たせます。
+```{r}
+who2 |>
+  pivot_longer(
+    cols = !(country:year),
+    names_to = c("diagnosis", "gender", "age"),
+    names_sep = "_",
+    values_to = "count"
+  )
+```
