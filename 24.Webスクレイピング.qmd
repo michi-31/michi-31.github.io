@@ -1,0 +1,225 @@
+---
+title: "Webスクレイピング"
+date: "2024-10-02"
+execute: 
+  error: true
+  cache: true
+format:
+  html: 
+    slide-level: 2
+    toc: true
+---
+
+# 目的
+rvestを用いたWebスクレイピングについて学ぶ。
+
+### 準備
+rvestはtidyverseのパッケージの一つだが、コアパッケージではないため、明示的に読み込む必要がある。  
+
+また、データ処理のためにtidyverseも読み込む。
+```{r}
+library(tidyverse)
+library(rvest)
+```
+
+# HTMLの基本
+HTMLは要素によって形成される階層構造を持っている。
+- 開始タグ: <tag>
+- 属性: id = 'first'
+- 終了タグ : </tag>
+- 内容: 開始から終了までの内容
+```markdown
+<html> 
+<head> # ページタイトルのようなドキュメントのメタデータ
+ <title>Page title</title>
+</head>
+<body> # ブラウザに表示する内容
+  <h1 id='first'> A heading</h1> # h1:見出し
+  <p>Some text &map; <b>some bold text.</b></p> # p: パラグラフ、b:太字
+  <img src='myimg.png' with='100' height='100'>
+</body>
+```
+### 細かな構成要素
+```markdown
+<,>が使えないことによる対応
+- &gt; : より大きい（＞） 
+- &lt; : より小さい（＜）
+- &amp; : リテラルの＆
+
+ブロックタグ
+- <html>: 文書の開始と終了を示すもの。必ず２つの子を持つ。
+- <haed>: ページタイトルのようなドキュメントのメタデータを含む
+- <body>: ブラウザに表示する内容
+- <h1>: 見出し
+- <section>: セクション
+- <p>: パラグラフ
+- <ol>: 順序付きリスト
+- <ul>: 順不同リスト
+- <li>: リストの各アイテムを定義するタグ。<ul> タグの中に含める。
+
+インラインタグ
+- <b>: 太字
+- <i>: 斜体
+- <a>: リンク
+```
+
+テキストの段落が含まれ１つの単語が太字になっている。  
+```markdown
+<p> # <p>には<b>という１つの子がある
+Hi! My <b>name</b> is Ken. # <b>には子はないが、コンテンツ（テキスト）がある
+</p>
+```
+
+### 属性
+タグにはname1='value1'のような属性名を付けることができる。  
+
+最も重要なのは、id属性とclass属性の２つでCSSと組み合わせて利用される。 
+
+### データの抽出
+- read_html(): 対象ページのURLからHTMLを読み取る
+```{r}
+html <- read_html("https://rvest.tidyverse.org/")
+
+html
+```
+rvestには、インラインでHTMLを記述できる関数がある。
+```{r}
+html <- minimal_html("
+  <p>This is paragraph</p>
+  <ul>
+    <li>This is a bulleted list</li>
+  </ul>
+")
+# htmlの内容を確認する
+html
+```
+
+### CSS
+CSS（Cascading Style Sheets）は、ウェブページの見た目をデザインするためのスタイルシート言語。  
+HTMLで構造を定義した後、CSSを使って色、フォント、レイアウト、間隔などを指定することができる。  
+
+CSSでは、HTML要素を選択するためのセレクタ（ミニ言語）を使う。  
+例えば、特定のクラスやID、タグ名を指定できる。
+
+- p : 全ての<p>要素を選択する
+- .title : class「title」を持つすべての要素を選択する
+- #title : 「title」と等しいid属性を持つ要素を選択する
+
+- html_elements(): セクタに一致するすべての要素を検索する関数
+- html_element(): セクタに一致する要素を検索する関数
+```{r}
+html <- minimal_html("
+  <p>This is paragraph</p>
+  <p id='first'> This is a heading</p>
+  <p class='important'>This is a importantparagraph</li>
+")
+# htmlの内容を確認する 
+html
+
+# セクタに<p>タグを持つHTML要素を取得する
+html |> html_elements("p") 
+
+# セクタのidがfirstであるHTML要素を取得する
+html |> html_elements("#first") 
+
+# 
+html |> html_element("p") 
+```
+
+### ネストの選択
+「ネストの選択」とは、HTMLやCSSにおいて、要素が他の要素の内部に配置されている場合に、それらの要素を選択する方法を指す。  
+特に、親要素の中に子要素が含まれている場合の選択について話すことが多い。
+
+### スター・ウォーズ
+rvest含まれているスターウォーズの事例を用いて練習する。
+
+- vinette(): 特定のパッケージに関する詳細な説明や使用例を提供する文書を開くために使われる関数。ヴィネットと読む。
+- html_text2(): HTMLのプレーンテキストを取得する関数
+```markdown
+vignette("starwars")
+```
+```{r}
+# HTMLを読み込む
+url <- "http://127.0.0.1:27642/library/rvest/doc/starwars.html"
+html <- read_html(url)
+
+# 全ての<section>要素を抽出する
+section <- html |>
+  html_elements("section")
+section
+
+# 全ての<h2>要素を抽出する
+section |>
+  html_element("h2") |>
+  html_text2() # プレーンテキストを抽出する
+
+# 全ての<.director>要素を抽出する
+section |> 
+  html_element(".director") |>
+  html_text2() # プレーンテキストを抽出する
+```
+
+
+tibble()関数を使って、データフレーム（starwars_df）を作成する。
+
+- title: html_element("h2")を使って、各セクション内の"h2"要素（タイトル）を抽出し、html_text2()でそのテキストを取得する。
+
+- released: html_element("p")で、リリース日を含む"p"要素を取得し、html_text2()でテキストを抽出する。
+- str_remove("Released: ")を使って、リリースの日付から「Released: 」という文字列を取り除く。
+- parse_date()で、抽出した日付文字列を日付オブジェクトに変換する。  
+
+- director: html_element(".director")を使って、クラス名がdirectorの要素を取得し、html_text2()でそのテキストを取得する。
+
+- intro: html_element(".crawl")を使って、クラス名がcrawlの要素を取得し、html_text2()でそのテキストを取得する。
+
+```{r}
+url <- "http://127.0.0.1:27642/library/rvest/doc/starwars.html"
+html <- read_html(url)
+section <- html |>
+  html_elements("section")
+
+# 結果をtibbleにまとめる
+starwars_df <- tibble(
+  title = section |>
+    html_element("h2") |>
+    html_text2(),
+  released = section |>
+    html_element("p") |>
+    html_text2() |>
+    str_remove("Released: ") |> # リリースの日付から「Released: 」という文字列を取り除く
+    parse_date(), # 抽出した日付文字列を日付オブジェクトに変換
+  director = section |>
+    html_element(".director") |>
+    html_text2(),
+  intro = section |>
+    html_element(".crawl") |>
+    html_text2()
+)
+starwars_df
+```
+
+### セクション
+section タグは、HTML5で導入された要素の一つで、文書のセクションを定義するために使用される。  
+特定のテーマやコンテンツを持つ部分を示すために用いられ、構造的にウェブページを整理するのに役立つ。
+
+- 味論的な要素: sectionタグは、その中に関連するコンテンツをグループ化する。  
+  例えば、記事、章、見出しなど、独立した内容のまとまりを示します。
+
+- 見出しとの組み合わせ: 通常、section タグの中には見出し（h1、h2、h3 など）が含まれ、そのセクションの内容を説明する。
+
+- SEOの利点: 構造的に正しいHTMLを作成することで、検索エンジンがコンテンツを理解しやすくなり、SEOに寄与する。
+
+この例では、article の中に二つの section があり、それぞれが異なるテーマ（HTMLとCSS）を持っている。
+```markdown
+<article>
+    <h1>ウェブデザインの基本</h1>
+    <section>
+        <h2>HTMLの役割</h2>
+        <p>HTMLはウェブページの基本的な構造を提供します。</p>
+    </section>
+    <section>
+        <h2>CSSの役割</h2>
+        <p>CSSはウェブページのスタイルを定義します。</p>
+    </section>
+</article>
+```

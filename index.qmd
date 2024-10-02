@@ -1,6 +1,6 @@
 ---
 title: "R、Pythonを用いた統計分析等について"
-date: "2024-09-"
+date: "2024-10-02"
 execute: 
   error: true
   cache: true
