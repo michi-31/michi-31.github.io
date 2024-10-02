@@ -1,0 +1,164 @@
+---
+title: "7.データインポート"
+date: "2024-10-02"
+execute: 
+  error: true
+  cache: true
+format:
+  html: 
+    slide-level: 2
+    toc: true
+---
+
+# 目的
+tidyverseのコアぱっけじであるreaderでファイルをRにロードする方法を学ぶ。
+
+```{r}
+library(tidyverse)
+```
+
+# CSV（comma-separated-values）ファイルの読み込み
+CSVファイルの先頭の行は、ヘッダ行と呼ばれ、列名を示す。  
+```markdown
+Student ID,Full Name,favourite.food,mealPlan,AGE
+1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
+2,Barclay Lynn,French fries,Lunch only,5
+3,Jayendra Lyne,N/A,Breakfast and lunch,7
+4,Leon Rossini,Anchovies,Lunch only,
+5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
+6,Güvenç Attila,Ice cream,Lunch only,6
+```
+
+- read_csv(): CSVファイルをRに読み込む関数
+ファイルを直接指定することも、Webからダウンロードできる場合は、URLを指定して読み込むこともできる。
+```{r}
+students1 <- read_csv("https://raw.githubusercontent.com/hadley/r4ds/main/data/students.csv")
+
+# データを確認
+students1
+```
+
+### NA処理
+デフォルトではデータセット内の空白のみをNAとして認識しているが、文字列N/A も同様にNAとしてRに認識させる必要がある。
+
+- na = c("N/A", ""): 文字列N/Aまたは空白をNAとして認識させる
+```{r}
+students <- read_csv("https://raw.githubusercontent.com/hadley/r4ds/main/data/students.csv", na = c("N/A", "")) 
+
+# データを確認
+students
+```
+
+### 非構文的名前を持つ変数の処理
+Student IDとFull Nameは、「`（バッククォート）」で囲まれている。  
+
+これは、名前にスペースが含まれているため、変数の命名規則に違反している状態を示す。  
+これらの変数を選択する際は、バッククォートで囲む必要がある。
+```{r}
+students |>
+  rename(
+    student_id = `Student ID`,
+    full_name = `Full Name`
+  )
+```
+
+1. 非構文的な列名の修正
+   janitor::clean_names()を用いて列名を修正する。 
+- janitor::clean_names(): janitorパッケージに含まれる関数で、データフレームの列名をすべてスネークケースに変換する関数  
+
+1. 変数型の変更１  
+   main_plan列は、データの中で特定のカテゴリやグループを表すため、カテゴリ変数として設定する。
+- factor(): meal_planの変数型を文字列<chr>からカテゴリ変数<fct>に変更する関数  
+
+3. 変数型の変更２
+   age列は、変数型が文字列になっていることに加えて、観測地の値に"five"があるため、適切な形式に変更する。
+- parse_number(): 文字列の中から数値部分を取り出す関数
+- if_else(): 条件に基づいて異なる値を返す関数  
+  if_else("条件式", "TRUEの場合の値", "FALSEの場合値")
+```{r}
+library(janitor)
+students <- students |>
+  janitor::clean_names() |>
+  mutate(
+    meal_plan = factor(meal_plan), # meal_planをカテゴリ変数に変更
+    age = parse_number(if_else(age == "five", "5", age)) # ageがfiveの場合に５を返し、それ以外の場合はageの値を返す
+  ) 
+```
+
+### CSVファイルの先頭行の処理
+CSVの先頭行にメタデータが含まれる場合など、スキップするための処理を行う。  
+
+- skip = n: 最初のｎ行をスキップするオプション
+- comment = "#": #で始まる全ての行を削除するオプション
+- col_names = FALSE: データに列名がない場合、X1~Xnまでの連続したラベルをつけるオプション
+```markdown
+# 最初の１行をスキップする場合
+read_csv(csv, skip = 1)
+
+# "#"コメント行をスキップする場合
+read_csv(csv, comment = "#")
+
+# 列名がない場合１
+read_csv(csv, col_names = FALSE)
+
+# 列名がない場合２
+read_csv(csv, col_names = c("x", "y", "z"))
+```
+
+### 他のファイル形式
+readrの他の関数を用いて特性に応じたデータを読み込むことができる。
+- read_csv2(): セミコロンで区切られたファイル
+- read_tsv(): タブで区切られたファイル
+- read_delim(): 任意の区切り記号で区切られたファイル
+- read_fwf(): 固定長ファイル
+- read_table(): 空白で区切られたファイル
+- read_log(): Apacheスタイルのログファイル
+
+# 列の型、欠損値による問題
+readrはヒューリスティックに基づいて列の型を判断する。  
+
+また、場合によってはデータに予期せぬ値が含まれており、列の検出が失敗することもある。  
+
+その場合、read_csv()の引数で対応することができる。
+- col_types = list("列名" = col_double()): 列名が数値列であることを示し、どこで失敗するのか見る引数
+- problems(): CSVの読み込みがどこで失敗するのかを調べる関数
+- read_csv(na = "."): 欠損値に対して「.」を使っていることが原因ならば、「.」を無視して必要な数値列を取得する
+
+列の型は全部で９種類あり、read_csv()の引数として指定することができる。
+- col_ligical(): 論理値
+- col_double(): 実数
+- col_integer(): 整数
+- col_charactor(): 文字列
+- col_factor(): ファクタ
+- col_date(): 日付
+- col_datetime(): 日時
+- col_number(): 数値
+- col_skip(): 列をスキップ
+```markdown
+# デフォルトの列を変更
+read_csv(
+    anothor_csv,
+    col_types = cols(.default = col_character())
+)
+
+# 指定した列だけ読み込む
+read_csv(
+    anothor_csv,
+    col_types = cols_only(x = col_character())
+)
+```
+
+# 複数のファイルからデータを読み込む
+ベクトルを使うことで、複数のファイルを読み込むことができる。
+
+- id = "file": 結果のデータフレームにfileという列を追加し、データの下となったファイルを識別する。
+```markdown
+sales_files <- c(file1, file2, file3)
+read_csv(sales_files, id = "file")
+```
+
+# ファイルへの書き出し
+- write_csv(): データフレームをCSVファイルで書き出す
+```markdown
+write_csv(students_new, "students_new.cdv")
+```

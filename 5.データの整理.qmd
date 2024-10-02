@@ -1,6 +1,6 @@
 ---
 title: "5.データの整理"
-date: "2024-10-01"
+date: "2024-10-02"
 execute: 
   error: true
   cache: true
@@ -19,32 +19,49 @@ format:
 library(tidyverse)
 ```
 # 練習問題
-# 1.データセットの行列を調べる
+### 1.データセットの行列を調べる
 ```{r}
 glimpse(table1)
 glimpse(table2)
 glimpse(table3)
 ```
-# 2.table2, table3についてrateを計算する
 
+### 2.table2, table3についてrateを計算する
 ```{r}
 table1 |>
   mutate(rate = cases / population * 10000)
 ```
-- sapply(): リストやベクトルに対して関数を適用し、結果をベクトルや行列に変換する
-```{r}
-table2 |>
-  filter(type %in% c("cases", "population")) |>
-  group_by(country, year) |>
-  summarize(
-    total_cases = sum(count[type == "cases"]),
-    total_population = sum(count[type == "population"]),
-  ) |>
-  mutate(rate = (total_cases / total_population) * 10000)
 
-rate
+```{r}
+table2_new <- table2 |>
+  pivot_wider(
+    names_from = type, # type列から名前を取得する
+    values_from = count # count列から値を取得する
+  ) |>
+  mutate( # 割合を計算して新しい列（rate）を作成する
+    rate = (cases / population ) * 10000
+  )
+# データを確認する
+table2_new
 ```
 
+- separate(): 特定の区切り文字で列を分割し、複数の列に展開する関数 
+- convert = TRUE: 分割後の列が可能な限り自動的に数値型に変換されるオプション
+```{r}
+table3_new <- table3 |>
+  separate(
+    rate, # 列名を指定する
+    into = c("cases", "population"), # 新しい列を作成する
+    sep = "/", # スラッシュで分割する
+    convert = TRUE # 文字列を数値に変換する
+  ) |>
+  mutate( # 割合を計算して新しい列（rate）を作成する
+    rate = (cases / population ) * 10000
+  )
+# データを確認する
+table3_new
+```
+別解
 ```{r}
 table3 |>
   mutate(
@@ -52,7 +69,6 @@ table3 |>
     function(x) eval(parse(text = x))) * 10000) |>
   group_by(country, year)  
 ```
-
 # 3.データを伸ばす
 2000年のビルボードの曲のランキングを記録したbillbordデータセットを用いて、列に変数、行に観測値を持つ整理した形式にデータを「ピボット」する。  
 
@@ -109,7 +125,6 @@ billboard_longer |>
 ```
 
 ### ピボットの仕組み
-
 idがA,B,Cの３人の患者が、それぞれ２回の血圧測定を行うデータセットを作成する。  
 ```{r}
 df <- tribble(
@@ -193,7 +208,6 @@ cms_patient_experience|>
 ```
 
 ### pivot_wider()の仕組み
-
 ```{r}
 df2 <- tribble(
     ~id,  ~measurement,  ~value,
