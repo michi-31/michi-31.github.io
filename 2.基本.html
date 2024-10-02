@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-09-29">
+<meta name="dcterms.date" content="2024-10-02">
 
 <title>2.基本</title>
 <style>
@@ -111,7 +111,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 29, 2024</p>
+      <p class="date">October 2, 2024</p>
     </div>
   </div>
   
@@ -125,21 +125,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="目的" class="level1">
 <h1>目的</h1>
-<p>Rの基本的な仕組みを整理します。</p>
+<p>Rの基本的な仕組みを整理する。</p>
 </section>
 <section id="コーディングの基本" class="level1">
 <h1>1.コーディングの基本</h1>
 <section id="代入演算子-" class="level3">
 <h3 class="anchored" data-anchor-id="代入演算子-">代入演算子：&lt;-</h3>
-<p>新たなオブジェクトは、代入演算子&lt;-を使って作成します。</p>
+<p>新たなオブジェクトは、代入演算子&lt;-を使って作成する。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">*</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>c()で複数の要素をベクトルとしてcombine（統合）します。</p>
+<p>c()で複数の要素をベクトルとしてcombine（統合）する。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>primes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>ベクトルに対する計算は、ベクトルのすべての要素に適用されます。</p>
+<p>ベクトルに対する計算は、ベクトルのすべての要素に適用される。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>primes <span class="sc">*</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -150,9 +150,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="コメント" class="level1">
 <h1>2.コメント：＃</h1>
-<p>Rでは、#以降のテキストを無視します。<br>
-コメントには、方法（how）や内容(what)ではなく、理由（why）を記載します。<br>
-例えば、デフォルト値を変更した場合など、変更した理由について自分の考えをコメントに記載します。</p>
+<p>Rでは、#以降のテキストを無視する。<br>
+コメントには、方法（how）や内容(what)ではなく、理由（why）を記載することを意識する。<br>
+例えば、デフォルト値を変更した場合など、変更した理由について自分の考えをコメントに記載する。</p>
 </section>
 <section id="練習問題" class="level1">
 <h1>練習問題</h1>
@@ -169,7 +169,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="rコマンドの修正" class="level3">
 <h3 class="anchored" data-anchor-id="rコマンドの修正">2.Rコマンドの修正</h3>
-<p>スペルミスを修正し、ggplotの第２引数にmapping引数を設定します。</p>
+<p>スペルミスを修正し、ggplotの第２引数にmapping引数を設定</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>library(todyverse)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a> ggplot(data = mpg)+</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>   geom_point(mapping = aes(x = displ, y = hwy)) +</span>
@@ -197,7 +197,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="コードの確認" class="level3">
 <h3 class="anchored" data-anchor-id="コードの確認">4.コードの確認</h3>
-<p>ggsave()の第２引数でmy_bar_plotが指定されているため、my_bar_plotが保存されます。</p>
+<p>ggsave()の第２引数でmy_bar_plotが指定されているため、my_bar_plotが保存される</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>my_bar_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(mpg, <span class="fu">aes</span>(<span class="at">x =</span> class)) <span class="sc">+</span> </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span>

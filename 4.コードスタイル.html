@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="目的" class="level1">
 <h1>目的</h1>
-<p>tidyverseスタイルガイドから、正しいコーディングスタイルを学びます。</p>
+<p>tidyverseスタイルガイドから、正しいコーディングスタイルを学ぶ。</p>
 <section id="準備" class="level3">
 <h3 class="anchored" data-anchor-id="準備">準備</h3>
 <ul>
@@ -149,27 +149,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="名前" class="level1">
 <h1>1.名前</h1>
-<p>変数の名前は英小文字、数字、_（アンダーバー）のみを使用します。</p>
-<p>また、名前内の単語の区切りは_を使用します。 名前は、長くても理解しやすい方がよいと考えられています。</p>
+<p>変数の名前は英小文字、数字、_（アンダーバー）のみを使用する。</p>
+<p>また、名前内の単語の区切りは_を使用する。 名前は、長くても理解しやすい方がよいと考えられている。</p>
 </section>
 <section id="スペース" class="level1">
 <h1>2.スペース</h1>
-<p>^以外の算術演算子の両端と代入演算子の前後にはスペースを入れます。</p>
-<p>また、カンマの後にもスペースを入れます。</p>
+<p>^以外の算術演算子の両端と代入演算子の前後にはスペースを入れる。</p>
+<p>また、カンマの後にもスペースを入れる。</p>
 </section>
 <section id="パイプ" class="level1">
 <h1>3.パイプ</h1>
-<p>|&gt;は前にスペースを入れ、行の最後に置きます。<br>
-また、パイプラインの最初のステップの後、各行を２つのスペースでインデントします。</p>
-<p>パイプ先に名前付きの引数がある場合は、引数を新しい行に配置します。<br>
-関数に名前付きの引数がない場合は、すべて１行にします。</p>
+<p>|&gt;は前にスペースを入れ、行の最後に置く。<br>
+また、パイプラインの最初のステップの後、各行を２つのスペースでインデントする。</p>
+<p>パイプ先に名前付きの引数がある場合は、引数を新しい行に配置する。<br>
+関数に名前付きの引数がない場合は、すべて１行にする。</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>flights |&gt; # 以降の行はスペース２つでインデント</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  group_by(tailnum) |&gt;</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  summarize(</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    delay = mean(arr_delay, na.rm = TRUE),</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    n = N() # 新しい行に配置</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>パイプラインが1行に収まる場合は、規則を省略しても問題ありません。</p>
+<p>パイプラインが1行に収まる場合は、規則を省略しても問題ない。</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># １行に収める場合</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df |&gt; mutate(y = x + 1)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -181,12 +181,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="ggplot2" class="level1">
 <h1>4.ggplot2</h1>
-<p>ggplot2にも同様の規則が適用されます。<br>
-ただし、演算子が|&gt;から＋に変わる点に注意してください。</p>
+<p>ggplot2にも同様の規則が適用される。<br>
+ただし、演算子が|&gt;から＋に変わる点に注意する。</p>
 </section>
 <section id="区切りコメント" class="level1">
 <h1>5.区切りコメント</h1>
-<p>スクリプトが長くなる場合、必要に応じて区切りコメントを使用します。</p>
+<p>スクリプトが長くなる場合、必要に応じて区切りコメントを使用する。</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Load data -----------------------------</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="練習問題" class="level1">

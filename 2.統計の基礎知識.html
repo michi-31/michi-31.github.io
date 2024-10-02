@@ -126,22 +126,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="目的" class="level1">
 <h1>目的</h1>
-<p>母集団と標本（サンプル）の考え方を学びます。</p>
+<p>母集団と標本（サンプル）の考え方を学ぶ。</p>
 </section>
 <section id="母集団と標本" class="level1">
 <h1>母集団と標本</h1>
-<p>例えば、政党の支持率に関するアンケート調査を行うとします。</p>
-<p>全有権者に対してアンケートを行うことは効率的でないため、少数の有権者をランダムに選び、調査を行います。</p>
-<p>ここで、母集団とは、有権者全体を指し、選ばれた一部のアンケート回答者を標本（サンプル）といいます。</p>
+<p>例えば、政党の支持率に関するアンケート調査を行うことを想定する。</p>
+<p>全有権者に対してアンケートを行うことは効率的でないため、少数の有権者をランダムに選び、調査を行う。</p>
+<p>ここで、母集団とは、有権者全体を指し、選ばれた一部のアンケート回答者を標本（サンプル）という。</p>
 <section id="正規分布と標準偏差" class="level3">
 <h3 class="anchored" data-anchor-id="正規分布と標準偏差">正規分布と標準偏差</h3>
-<p>母集団として用いられる確率分布には、正規分布（normal distribution）があります。</p>
-<p>正規分布では、山の中心を平均、横幅を標準偏差といいます。</p>
-<p>そして、平均や標準偏差のような母集団分布の形状を決める係数をパラメータや母数といいます。</p>
-<p>例えば、統計的な表現では、平均が50、標準偏差が10の正規分布をN（50, 10^2）と表現します。 ここで、10^2は標準偏差の２乗である分散を指します。</p>
+<p>母集団として用いられる確率分布には、正規分布（normal distribution）がある。</p>
+<p>正規分布では、山の中心を平均、横幅を標準偏差という。</p>
+<p>そして、平均や標準偏差のような母集団分布の形状を決める係数をパラメータや母数という。</p>
+<p>例えば、統計的な表現では、平均が50、標準偏差が10の正規分布をN（50, 10^2）と表現する。 ここで、10^2は標準偏差の２乗である分散を指す。</p>
 <ul>
 <li>rnorm(): 指定された平均と標準偏差に基づいて正規分布からランダムな値を生成する関数<br>
-平均50、標準偏差10の正規分布に従う乱数を20個作る</li>
+平均50、標準偏差10の正規分布に従う乱数を20個作る。</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rnorm</span>(<span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -153,7 +153,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <ul>
 <li>dnorm(): 正規分布の密度（density）を調べる関数</li>
-<li>curve(): 与えられた関数を、最小値から最大値までの範囲でグラフ化する</li>
+<li>curve(): 与えられた関数を、最小値から最大値までの範囲でグラフ化する関数</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">dnorm</span>(x, <span class="dv">50</span>, <span class="dv">10</span>), <span class="dv">0</span>, <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

@@ -11,10 +11,10 @@ format:
 ---
 
 # 目的
-整理データ（tidy data）と呼ばれるシステムを使ってデータの整理方法を学びます。 
+整理データ（tidy data）と呼ばれるシステムを使ってデータの整理方法を学ぶ。 
 
 # 1.準備
-データ整理のツールtidyrを使用するため、tidyverseをロードします。
+データ整理のツールtidyrを使用するため、tidyverseをロードする。
 ```{r}
 library(tidyverse)
 ```
@@ -54,15 +54,16 @@ table3 |>
 ```
 
 # 3.データを伸ばす
-2000年のビルボードの曲のランキングを記録したbillbordデータセットを用いて、列に変数、行に観測値を持つ整理した形式にデータを「ピボット」します。  
+2000年のビルボードの曲のランキングを記録したbillbordデータセットを用いて、列に変数、行に観測値を持つ整理した形式にデータを「ピボット」する。  
 
-ピボットとは、横持ち形式（ワイドフォーマット）のデータを縦持ち形式（ロングフォーマット）に展開することや、形式変換、集計を行う操作を指します（その逆も）。
+ピボットとは、横持ち形式（ワイドフォーマット）のデータを縦持ち形式（ロングフォーマット）に展開することや、形式変換、集計を行う操作を指す（その逆も）。
 ```{r}
 head(billboard)
 ```
-- cols: ピボットする列（変数から除外する列）を指定する
-- names_to: 列に格納されている変数に名前を付ける
-- values_to:  値に格納されている変数に名前を付ける
+- pivot_longer(): データフレームを「ワイド」形式から「ロング」形式に変換するための関数
+  - cols: ピボットする列（変数から除外する列）を指定する引数
+  - names_to: 列に格納されている変数に名前を付ける引数
+  - values_to:  値に格納されている変数に名前を付ける引数
 ```{r}
 billboard |>
   pivot_longer(
@@ -71,7 +72,7 @@ billboard |>
     values_to = "rank"
   )
 ```
-pivot_longer()にvalue_drop_na = TRUEを設定して、欠損値を取り除くよう指定します。
+pivot_longer()にvalue_drop_na = TRUEを設定して、欠損値を取り除くよう指定する
 ```{r}
 billboard |>
   pivot_longer(
@@ -81,7 +82,8 @@ billboard |>
     values_drop_na = TRUE
   )
 ```
-mutate()とreadr::parse_number()を用いて、文字列を数値に変換します。
+- mutate(): 新たに作成された「week」列を数値に変換
+- parse_number(week): 週を表す文字列（例えば「wk1」など）から数値部分を抽出し、数値型に変換
 ```{r}
 billboard_longer <- billboard |>
   pivot_longer(
@@ -90,25 +92,25 @@ billboard_longer <- billboard |>
     values_to = "rank",
     values_drop_na = TRUE
   ) |>
-   mutate(
-    week = parse_number(week)
-   )
+  mutate(
+    week = parse_number(week) # 文字列から数値を抽出する
+  )
 ```
 
-曲のランキングが週の経過とともにどのように変化するのかを可視化します。
+曲のランキングが週の経過とともに変化する様子を可視化する。
 
-scale_y_reverse()は、y軸を逆にするための関数です。  
-通常、ランキングは小さい値が上位（例えば1位）、大きい値が下位ですが、この関数を使うことで上位のランクが上に表示されます。
+- scale_y_reverse(): y軸の方向を逆にするための関数  
+ランキングは小さい値が上位（例えば1位）、大きい値が下位だが、この関数を使うことで上位のランクが上に表示される。
 ```{r}
 billboard_longer |>
   ggplot(aes(x = week, y = rank, group = track)) +
   geom_line(alpha = 0.25) + 
-  scale_y_reverse()
+  scale_y_reverse() # y軸を逆にする（高いランキングが上になる）
 ```
 
 ### ピボットの仕組み
 
-idがA,B,Cの３人の患者がいて、それぞれの患者で２回の血圧測定を行うとします。  
+idがA,B,Cの３人の患者が、それぞれ２回の血圧測定を行うデータセットを作成する。  
 ```{r}
 df <- tribble(
     ~id,  ~bp1,  ~bp2,
@@ -116,73 +118,77 @@ df <- tribble(
     "B",   140,   115,
     "C",   120,   125
 )
-
+# データセットを確認する
 df
 ```
 
-新しいデータセットには、id, measurement（列）, value（値）の３つの変数を持たせます。
+新しいデータセットには、id, measurement（列）, value（値）の３つの変数を持たせる。
 ```{r}
 df |>
   pivot_longer(
-    cols = bp1:bp2,
-    names_to = "measurement",
-    values_to = "value"
+    cols = bp1:bp2, # bp1とbp2をピボットする列として指定
+    names_to = "measurement", # ピボットした列名を格納する新しい列名
+    values_to = "value" # ピボットした値を格納する新しい列名
   )
 ```
 
-世界保健機関によって収集されたデータセットwho2を用いて、データをロング形式に変換します。  
+世界保健機関（who）によって収集されたデータセットwho2を用いて、データをロング形式に変換する。  
 
-新しいデータセットには、国と年、診断方法、性別、年齢層、患者数の６つの変数を持たせます。
+新しいデータセットには、国と年、診断方法、性別、年齢層、患者数の６つの変数を持たせる。
+
+- names_sep: 元の列名をアンダースコアで分割するオプション  
+この場合、例えば「HIV_female_15-24」という列名があれば、それをdiagnosis、gender、ageに分けることができる。
 ```{r}
 head(who2)
 
 who2 |>
   pivot_longer(
-    cols = !(country:year),
-    names_to = c("diagnosis", "gender", "age"),
-    names_sep = "_",
-    values_to = "count"
+    cols = !(country:year), # countryからyearまでを除外し、それ以外の列を指定
+    names_to = c("diagnosis", "gender", "age"), # ピボットした元の列名を格納する新しい列名
+    names_sep = "_",  # 列名をアンダースコアで分割
+    values_to = "count" # ピボットした値を格納する新しい列名
   )
 ```
 
-５つの家族に関するデータが含まれているデータセットhouseholdを用いて、データをロング形式に変換します。  
+５つの家族に関するデータが含まれているデータセットhouseholdを用いて、データをロング形式に変換する。  
 
-列名に２つの変数名（dob, name）と他の値があるため、names_to = で".value"を設定し、２つの構成要素に分割します。
-なお、子供が１人だけの場合など処理によって欠落した変数が作成されるため、values_drop_na = TRUEで欠損値を取り除きます。
+列名に２つの変数名（dob, name）と他の値があるため、names_to = で".value"を設定し、２つの構成要素に分割する。
+なお、子供が１人だけの場合など処理によって欠落した変数が作成されるため、values_drop_na = TRUEで欠損値を取り除く。
 ```{r}
 head(household)
 
 household |>
+# householdデータフレームをロング形式に変換
   pivot_longer(
-    cols = !family,
-    names_to = c(".value", "chiled"),
-    names_sep = "_",
-    values_drop_na = TRUE
+    cols = !family, # family以外の全ての列をピボット対象に指定
+    names_to = c(".value", "chiled"),  # 変数名を格納する新しい列名
+    names_sep = "_", # アンダースコアで列名を分割
+    values_drop_na = TRUE # NAの値を持つ行を除外
   )
 ```
 
 # 4.データを広げる
-pivoto_wider()を用いて、１つの観測が複数の行に分割されている場合を考えます。  
+pivoto_wider()を用いて、１つの観測が複数の行に分割されている場合を考える。  
 
-米国のCMSから患者の経験に関するデータを収集したデータセットを使います。  
+米国のCMSが収集した患者の経験に関するデータセットを使う。  
 
-distinct(measure_cd, measure_title)で、ユニークな組み合わせを表示します。
+- distinct(measure_cd, measure_title): ユニークな組み合わせを表示
 ```{r}
 head(cms_patient_experience)
 
 cms_patient_experience|>
-  distinct(measure_cd, measure_title)
+  distinct(measure_cd, measure_title) # ユニークな組み合わせを表示
 ```
-- pivot_wider(): データをロング形式からワイド形式に変換します。
-  - id_cols = starts_with("org"): "org" で始まる識別子列を指定します。これらの列はピボット後もそのまま残ります。
-  - names_from = measure_cd: measure_cd 列の値が新しい列名になります。
-  - values_from = prf_rate: 新しい列に入る値は prf_rate 列から取得します
+- pivot_wider(): データをロング形式からワイド形式に変換する関数
+  - id_cols = starts_with("org"): "org" で始まる識別子列を指定する引数。これらの列はピボット後もそのまま残ります。
+  - names_from = measure_cd: measure_cd 列の値が新しい列名にする引数
+  - values_from = prf_rate: 新しい列に入る値は prf_rate 列から取得する引数
 ```{r}
 cms_patient_experience|>
   pivot_wider(
-    id_cols = starts_with("org"),
-    names_from = measure_cd,
-    values_from = prf_rate
+    id_cols = starts_with("org"), # 組織に関連する列をID列として指定
+    names_from = measure_cd, # measure_cdから新しい列名を作成
+    values_from = prf_rate # prf_rateの値を新しい列に格納
   )
 ```
 
@@ -201,30 +207,31 @@ df2 <- tribble(
 df
 ```
 
-value列から値を取り出して、measurement列から列名を取得します。
+value列から値を取り出して、measurement列から列名を取得する。
 ```{r}
 df2 |>
   pivot_wider(
-    names_from = measurement,
-    values_from = value
+    names_from = measurement, # measurement列から新しい列名を作成
+    values_from = value # value列の値を新しい列に格納
   )
 ```
 
-新しい列名は、measurementの一意の値になります。
+新しい列名は、measurementの一意の値になる。
 
-- distinct(measurement): ここで、measurement 列のユニークな値を取得します。
-- pull(): これにより、measurement 列の値がベクトルとして返されます。
+- distinct(measurement): ここで、measurement 列のユニークな値を取得する
+- pull(): データフレームから特定の列をベクトルとして抽出する関数  
+  ここでは、distinct(measurement)で得られたユニークなmeasurementの値をベクトルとして取得する。
 ```{r}
 df2 |>
-  distinct(measurement) |>
-  pull()
+  distinct(measurement) |> # measurement列のユニークな値を取得
+  pull() # データフレームからベクトルとして値を抽出
 ```
-- select(-measurement, -value): measurement 列と value 列を削除します。
-- distinct(): 重複を排除します。
-- mutate(x = NA, y = NA, z = NA): 新しい列 x, y, z を追加し、すべての値を NA で初期化します。
+- select(-measurement, -value): measurement 列と value 列を削除する。
+- distinct(): 重複を排除する。
+- mutate(x = NA, y = NA, z = NA): 新しい列 x, y, z を追加し、すべての値を NA で初期化する。
 ```{r}
 df2 |>
   select(-measurement, -value) |>
   distinct() |>
-  mutate(x = NA, y = NA, z = NA)
+  mutate(x = NA, y = NA, z = NA) # 新しい列x, y, zを追加し、すべての値をNAで初期化
 ```

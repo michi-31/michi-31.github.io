@@ -125,11 +125,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="目的" class="level1">
 <h1>目的</h1>
-<p>整理データ（tidy data）と呼ばれるシステムを使ってデータの整理方法を学びます。</p>
+<p>整理データ（tidy data）と呼ばれるシステムを使ってデータの整理方法を学ぶ。</p>
 </section>
 <section id="準備" class="level1">
 <h1>1.準備</h1>
-<p>データ整理のツールtidyrを使用するため、tidyverseをロードします。</p>
+<p>データ整理のツールtidyrを使用するため、tidyverseをロードする。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -252,8 +252,8 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 </section>
 <section id="データを伸ばす" class="level1">
 <h1>3.データを伸ばす</h1>
-<p>2000年のビルボードの曲のランキングを記録したbillbordデータセットを用いて、列に変数、行に観測値を持つ整理した形式にデータを「ピボット」します。</p>
-<p>ピボットとは、横持ち形式（ワイドフォーマット）のデータを縦持ち形式（ロングフォーマット）に展開することや、形式変換、集計を行う操作を指します（その逆も）。</p>
+<p>2000年のビルボードの曲のランキングを記録したbillbordデータセットを用いて、列に変数、行に観測値を持つ整理した形式にデータを「ピボット」する。</p>
+<p>ピボットとは、横持ち形式（ワイドフォーマット）のデータを縦持ち形式（ロングフォーマット）に展開することや、形式変換、集計を行う操作を指す（その逆も）。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(billboard)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -276,9 +276,12 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 </div>
 </div>
 <ul>
-<li>cols: ピボットする列（変数から除外する列）を指定する</li>
-<li>names_to: 列に格納されている変数に名前を付ける</li>
-<li>values_to: 値に格納されている変数に名前を付ける</li>
+<li>pivot_longer(): データフレームを「ワイド」形式から「ロング」形式に変換するための関数
+<ul>
+<li>cols: ピボットする列（変数から除外する列）を指定する引数</li>
+<li>names_to: 列に格納されている変数に名前を付ける引数</li>
+<li>values_to: 値に格納されている変数に名前を付ける引数</li>
+</ul></li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>billboard <span class="sc">|&gt;</span></span>
@@ -304,7 +307,7 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 # ℹ 24,082 more rows</code></pre>
 </div>
 </div>
-<p>pivot_longer()にvalue_drop_na = TRUEを設定して、欠損値を取り除くよう指定します。</p>
+<p>pivot_longer()にvalue_drop_na = TRUEを設定して、欠損値を取り除くよう指定する</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>billboard <span class="sc">|&gt;</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
@@ -330,7 +333,10 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 # ℹ 5,297 more rows</code></pre>
 </div>
 </div>
-<p>mutate()とreadr::parse_number()を用いて、文字列を数値に変換します。</p>
+<ul>
+<li>mutate(): 新たに作成された「week」列を数値に変換</li>
+<li>parse_number(week): 週を表す文字列（例えば「wk1」など）から数値部分を抽出し、数値型に変換</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>billboard_longer <span class="ot">&lt;-</span> billboard <span class="sc">|&gt;</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
@@ -339,18 +345,20 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"rank"</span>,</span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_drop_na =</span> <span class="cn">TRUE</span></span>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">week =</span> <span class="fu">parse_number</span>(week)</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">week =</span> <span class="fu">parse_number</span>(week) <span class="co"># 文字列から数値を抽出する</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>曲のランキングが週の経過とともにどのように変化するのかを可視化します。</p>
-<p>scale_y_reverse()は、y軸を逆にするための関数です。<br>
-通常、ランキングは小さい値が上位（例えば1位）、大きい値が下位ですが、この関数を使うことで上位のランクが上に表示されます。</p>
+<p>曲のランキングが週の経過とともに変化する様子を可視化する。</p>
+<ul>
+<li>scale_y_reverse(): y軸の方向を逆にするための関数<br>
+ランキングは小さい値が上位（例えば1位）、大きい値が下位だが、この関数を使うことで上位のランクが上に表示される。</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>billboard_longer <span class="sc">|&gt;</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> week, <span class="at">y =</span> rank, <span class="at">group =</span> track)) <span class="sc">+</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">alpha =</span> <span class="fl">0.25</span>) <span class="sc">+</span> </span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="co"># y軸を逆にする（高いランキングが上になる）</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -361,7 +369,7 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 </div>
 <section id="ピボットの仕組み" class="level3">
 <h3 class="anchored" data-anchor-id="ピボットの仕組み">ピボットの仕組み</h3>
-<p>idがA,B,Cの３人の患者がいて、それぞれの患者で２回の血圧測定を行うとします。</p>
+<p>idがA,B,Cの３人の患者が、それぞれ２回の血圧測定を行うデータセットを作成する。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>id,  <span class="sc">~</span>bp1,  <span class="sc">~</span>bp2,</span>
@@ -369,7 +377,7 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"B"</span>,   <span class="dv">140</span>,   <span class="dv">115</span>,</span>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"C"</span>,   <span class="dv">120</span>,   <span class="dv">125</span></span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># データセットを確認する</span></span>
 <span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 3
@@ -380,13 +388,13 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 3 C       120   125</code></pre>
 </div>
 </div>
-<p>新しいデータセットには、id, measurement（列）, value（値）の３つの変数を持たせます。</p>
+<p>新しいデータセットには、id, measurement（列）, value（値）の３つの変数を持たせる。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> bp1<span class="sc">:</span>bp2,</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"measurement"</span>,</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"value"</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> bp1<span class="sc">:</span>bp2, <span class="co"># bp1とbp2をピボットする列として指定</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"measurement"</span>, <span class="co"># ピボットした列名を格納する新しい列名</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"value"</span> <span class="co"># ピボットした値を格納する新しい列名</span></span>
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
@@ -400,8 +408,12 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 6 C     bp2           125</code></pre>
 </div>
 </div>
-<p>世界保健機関によって収集されたデータセットwho2を用いて、データをロング形式に変換します。</p>
-<p>新しいデータセットには、国と年、診断方法、性別、年齢層、患者数の６つの変数を持たせます。</p>
+<p>世界保健機関（who）によって収集されたデータセットwho2を用いて、データをロング形式に変換する。</p>
+<p>新しいデータセットには、国と年、診断方法、性別、年齢層、患者数の６つの変数を持たせる。</p>
+<ul>
+<li>names_sep: 元の列名をアンダースコアで分割するオプション<br>
+この場合、例えば「HIV_female_15-24」という列名があれば、それをdiagnosis、gender、ageに分けることができる。</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(who2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -424,10 +436,10 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 </div>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>who2 <span class="sc">|&gt;</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">!</span>(country<span class="sc">:</span>year),</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"diagnosis"</span>, <span class="st">"gender"</span>, <span class="st">"age"</span>),</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">"_"</span>,</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"count"</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">!</span>(country<span class="sc">:</span>year), <span class="co"># countryからyearまでを除外し、それ以外の列を指定</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"diagnosis"</span>, <span class="st">"gender"</span>, <span class="st">"age"</span>), <span class="co"># ピボットした元の列名を格納する新しい列名</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">"_"</span>,  <span class="co"># 列名をアンダースコアで分割</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"count"</span> <span class="co"># ピボットした値を格納する新しい列名</span></span>
 <span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 405,440 × 6
@@ -446,8 +458,8 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 # ℹ 405,430 more rows</code></pre>
 </div>
 </div>
-<p>５つの家族に関するデータが含まれているデータセットhouseholdを用いて、データをロング形式に変換します。</p>
-<p>列名に２つの変数名（dob, name）と他の値があるため、names_to = で”.value”を設定し、２つの構成要素に分割します。 なお、子供が１人だけの場合など処理によって欠落した変数が作成されるため、values_drop_na = TRUEで欠損値を取り除きます。</p>
+<p>５つの家族に関するデータが含まれているデータセットhouseholdを用いて、データをロング形式に変換する。</p>
+<p>列名に２つの変数名（dob, name）と他の値があるため、names_to = で”.value”を設定し、２つの構成要素に分割する。 なお、子供が１人だけの場合など処理によって欠落した変数が作成されるため、values_drop_na = TRUEで欠損値を取り除く。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(household)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -461,12 +473,13 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 5      5 2000-12-05 2005-02-28 Parker      Gracie     </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>household <span class="sc">|&gt;</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">!</span>family,</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"chiled"</span>),</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">"_"</span>,</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_drop_na =</span> <span class="cn">TRUE</span></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># householdデータフレームをロング形式に変換</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="sc">!</span>family, <span class="co"># family以外の全ての列をピボット対象に指定</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"chiled"</span>),  <span class="co"># 変数名を格納する新しい列名</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">"_"</span>, <span class="co"># アンダースコアで列名を分割</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_drop_na =</span> <span class="cn">TRUE</span> <span class="co"># NAの値を持つ行を除外</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 4
   family chiled dob        name  
@@ -486,9 +499,11 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 </section>
 <section id="データを広げる" class="level1">
 <h1>4.データを広げる</h1>
-<p>pivoto_wider()を用いて、１つの観測が複数の行に分割されている場合を考えます。</p>
-<p>米国のCMSから患者の経験に関するデータを収集したデータセットを使います。</p>
-<p>distinct(measure_cd, measure_title)で、ユニークな組み合わせを表示します。</p>
+<p>pivoto_wider()を用いて、１つの観測が複数の行に分割されている場合を考える。</p>
+<p>米国のCMSが収集した患者の経験に関するデータセットを使う。</p>
+<ul>
+<li>distinct(measure_cd, measure_title): ユニークな組み合わせを表示</li>
+</ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cms_patient_experience)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -503,7 +518,7 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 6 0446157747 USC CARE MEDICAL GROUP INC CAHPS_GRP_12 CAHPS for MIPS SS…       24</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>cms_patient_experience<span class="sc">|&gt;</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(measure_cd, measure_title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(measure_cd, measure_title) <span class="co"># ユニークな組み合わせを表示</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 2
   measure_cd   measure_title                                                    
@@ -517,19 +532,19 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 </div>
 </div>
 <ul>
-<li>pivot_wider(): データをロング形式からワイド形式に変換します。
+<li>pivot_wider(): データをロング形式からワイド形式に変換する関数
 <ul>
-<li>id_cols = starts_with(“org”): “org” で始まる識別子列を指定します。これらの列はピボット後もそのまま残ります。</li>
-<li>names_from = measure_cd: measure_cd 列の値が新しい列名になります。</li>
-<li>values_from = prf_rate: 新しい列に入る値は prf_rate 列から取得します</li>
+<li>id_cols = starts_with(“org”): “org” で始まる識別子列を指定する引数。これらの列はピボット後もそのまま残ります。</li>
+<li>names_from = measure_cd: measure_cd 列の値が新しい列名にする引数</li>
+<li>values_from = prf_rate: 新しい列に入る値は prf_rate 列から取得する引数</li>
 </ul></li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>cms_patient_experience<span class="sc">|&gt;</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">id_cols =</span> <span class="fu">starts_with</span>(<span class="st">"org"</span>),</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> measure_cd,</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> prf_rate</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">id_cols =</span> <span class="fu">starts_with</span>(<span class="st">"org"</span>), <span class="co"># 組織に関連する列をID列として指定</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> measure_cd, <span class="co"># measure_cdから新しい列名を作成</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> prf_rate <span class="co"># prf_rateの値を新しい列に格納</span></span>
 <span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 95 × 8
@@ -571,12 +586,12 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 3 C       120   125</code></pre>
 </div>
 </div>
-<p>value列から値を取り出して、measurement列から列名を取得します。</p>
+<p>value列から値を取り出して、measurement列から列名を取得する。</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="sc">|&gt;</span></span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> measurement,</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> value</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> measurement, <span class="co"># measurement列から新しい列名を作成</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> value <span class="co"># value列の値を新しい列に格納</span></span>
 <span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 4
@@ -586,29 +601,30 @@ $ rate    &lt;chr&gt; "745/19987071", "2666/20595360", "37737/172006362", "80488
 2 B       140   115    NA</code></pre>
 </div>
 </div>
-<p>新しい列名は、measurementの一意の値になります。</p>
+<p>新しい列名は、measurementの一意の値になる。</p>
 <ul>
-<li>distinct(measurement): ここで、measurement 列のユニークな値を取得します。</li>
-<li>pull(): これにより、measurement 列の値がベクトルとして返されます。</li>
+<li>distinct(measurement): ここで、measurement 列のユニークな値を取得する</li>
+<li>pull(): データフレームから特定の列をベクトルとして抽出する関数<br>
+ここでは、distinct(measurement)で得られたユニークなmeasurementの値をベクトルとして取得する。</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="sc">|&gt;</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(measurement) <span class="sc">|&gt;</span></span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(measurement) <span class="sc">|&gt;</span> <span class="co"># measurement列のユニークな値を取得</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>() <span class="co"># データフレームからベクトルとして値を抽出</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "bp1" "bp2" "bp3"</code></pre>
 </div>
 </div>
 <ul>
-<li>select(-measurement, -value): measurement 列と value 列を削除します。</li>
-<li>distinct(): 重複を排除します。</li>
-<li>mutate(x = NA, y = NA, z = NA): 新しい列 x, y, z を追加し、すべての値を NA で初期化します。</li>
+<li>select(-measurement, -value): measurement 列と value 列を削除する。</li>
+<li>distinct(): 重複を排除する。</li>
+<li>mutate(x = NA, y = NA, z = NA): 新しい列 x, y, z を追加し、すべての値を NA で初期化する。</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="sc">|&gt;</span></span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>measurement, <span class="sc">-</span>value) <span class="sc">|&gt;</span></span>
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> <span class="cn">NA</span>, <span class="at">y =</span> <span class="cn">NA</span>, <span class="at">z =</span> <span class="cn">NA</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> <span class="cn">NA</span>, <span class="at">y =</span> <span class="cn">NA</span>, <span class="at">z =</span> <span class="cn">NA</span>) <span class="co"># 新しい列x, y, zを追加し、すべての値をNAで初期化</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 4
   id    x     y     z    
