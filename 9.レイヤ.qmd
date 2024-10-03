@@ -1,0 +1,42 @@
+---
+title: "9.レイヤ"
+date: "2024-10-04"
+execute: 
+  error: true
+  cache: true
+format:
+  html: 
+    slide-level: 2
+    toc: true
+---
+
+# 目的
+ggplot2を用いてグラフィックスの階層化された文法について学習しながら、その基礎について学ぶ。
+
+### 準備
+ggplot2パッケージにバンドルされているmpgデータフレームを準備する。
+```{r}
+library(tidyverse)
+
+# mpgデータフレーム
+mpg
+```
+
+車種（class）ごとに排気量（displ）と高速道路走行時の燃費（hwy）の関係を可視化する。  
+```{r}
+# カテゴリ変数にcolorを指定
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
+ geom_point()
+
+# カテゴリ変数にshapeを指定
+ggplot(mpg, aes(x = displ, y = hwy, shape = class)) +
+ geom_point()
+
+# classをsizeのエステティック属性にマッピング
+ggplot(mpg, aes(x = displ, y = hwy, size = class)) +
+ geom_point()
+
+# classをalphaのエステティック属性にマッピング
+ggplot(mpg, aes(x = displ, y = hwy, alpha = class)) +
+ geom_point()
+```
