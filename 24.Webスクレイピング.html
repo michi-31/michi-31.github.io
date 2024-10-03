@@ -86,13 +86,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#htmlの基本" id="toc-htmlの基本" class="nav-link" data-scroll-target="#htmlの基本">HTMLの基本</a>
   <ul class="collapse">
-  <li><a href="#細かな構成要素" id="toc-細かな構成要素" class="nav-link" data-scroll-target="#細かな構成要素">細かな構成要素</a></li>
+  <li><a href="#構成要素の例" id="toc-構成要素の例" class="nav-link" data-scroll-target="#構成要素の例">構成要素の例</a></li>
+  <li><a href="#補足セクション" id="toc-補足セクション" class="nav-link" data-scroll-target="#補足セクション">（補足）セクション</a></li>
   <li><a href="#属性" id="toc-属性" class="nav-link" data-scroll-target="#属性">属性</a></li>
-  <li><a href="#データの抽出" id="toc-データの抽出" class="nav-link" data-scroll-target="#データの抽出">データの抽出</a></li>
+  </ul></li>
+  <li><a href="#htmlの読み取り" id="toc-htmlの読み取り" class="nav-link" data-scroll-target="#htmlの読み取り">HTMLの読み取り</a>
+  <ul class="collapse">
   <li><a href="#css" id="toc-css" class="nav-link" data-scroll-target="#css">CSS</a></li>
-  <li><a href="#ネストの選択" id="toc-ネストの選択" class="nav-link" data-scroll-target="#ネストの選択">ネストの選択</a></li>
-  <li><a href="#スターウォーズ" id="toc-スターウォーズ" class="nav-link" data-scroll-target="#スターウォーズ">スター・ウォーズ</a></li>
-  <li><a href="#セクション" id="toc-セクション" class="nav-link" data-scroll-target="#セクション">セクション</a></li>
+  <li><a href="#ネストの選択--サンプルサイトからのスクレイピング" id="toc-ネストの選択--サンプルサイトからのスクレイピング" class="nav-link" data-scroll-target="#ネストの選択--サンプルサイトからのスクレイピング">ネストの選択 -サンプルサイトからのスクレイピング</a></li>
+  <li><a href="#tibbleにまとめる" id="toc-tibbleにまとめる" class="nav-link" data-scroll-target="#tibbleにまとめる">tibbleにまとめる</a></li>
+  <li><a href="#テーブル" id="toc-テーブル" class="nav-link" data-scroll-target="#テーブル">テーブル</a></li>
+  <li><a href="#imdｂ人気映画ランキングからのスクレイピング" id="toc-imdｂ人気映画ランキングからのスクレイピング" class="nav-link" data-scroll-target="#imdｂ人気映画ランキングからのスクレイピング">IMDｂ人気映画ランキングからのスクレイピング</a></li>
+  <li><a href="#cssセレクタと.ドット" id="toc-cssセレクタと.ドット" class="nav-link" data-scroll-target="#cssセレクタと.ドット">CSSセレクタと.（ドット）</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -130,86 +135,94 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="準備" class="level3">
 <h3 class="anchored" data-anchor-id="準備">準備</h3>
 <p>rvestはtidyverseのパッケージの一つだが、コアパッケージではないため、明示的に読み込む必要がある。</p>
-<p>また、データ処理のためにtidyverseも読み込む。</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.5
-✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-✔ purrr     1.0.2     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-次のパッケージを付け加えます: 'rvest'
-
-以下のオブジェクトは 'package:readr' からマスクされています:
-
-    guess_encoding</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># tidyverseはスクレイピング後のデータ処理に使う</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
 <section id="htmlの基本" class="level1">
 <h1>HTMLの基本</h1>
-<p>HTMLは要素によって形成される階層構造を持っている。 - 開始タグ: <tag> - 属性: id = ‘first’ - 終了タグ : </tag> - 内容: 開始から終了までの内容</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>&lt;html&gt; </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>&lt;head&gt; # ページタイトルのようなドキュメントのメタデータ</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a> &lt;title&gt;Page title&lt;/title&gt;</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>&lt;/head&gt;</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>&lt;body&gt; # ブラウザに表示する内容</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  &lt;h1 id='first'&gt; A heading&lt;/h1&gt; # h1:見出し</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  &lt;p&gt;Some text <span class="dv">&amp;map;</span> &lt;b&gt;some bold text.&lt;/b&gt;&lt;/p&gt; # p: パラグラフ、b:太字</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  &lt;img src='myimg.png' with='100' height='100'&gt;</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>&lt;/body&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<section id="細かな構成要素" class="level3">
-<h3 class="anchored" data-anchor-id="細かな構成要素">細かな構成要素</h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>&lt;,&gt;が使えないことによる対応</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="dv">&amp;gt;</span> : より大きい（＞） </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="dv">&amp;lt;</span> : より小さい（＜）</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="dv">&amp;amp;</span> : リテラルの＆</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>ブロックタグ</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;html&gt;: 文書の開始と終了を示すもの。必ず２つの子を持つ。</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;haed&gt;: ページタイトルのようなドキュメントのメタデータを含む</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;body&gt;: ブラウザに表示する内容</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;h1&gt;: 見出し</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;section&gt;: セクション</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;p&gt;: パラグラフ</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;ol&gt;: 順序付きリスト</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;ul&gt;: 順不同リスト</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;li&gt;: リストの各アイテムを定義するタグ。&lt;ul&gt; タグの中に含める。</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>インラインタグ</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;b&gt;: 太字</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;i&gt;: 斜体</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;a&gt;: リンク</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>テキストの段落が含まれ１つの単語が太字になっている。</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>&lt;p&gt; # &lt;p&gt;には&lt;b&gt;という１つの子がある</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Hi! My &lt;b&gt;name&lt;/b&gt; is Ken. # &lt;b&gt;には子はないが、コンテンツ（テキスト）がある</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>HTM（HyperText Markup Language）は、Webページを記述する言語で、要素によって形成される階層構造を持っている。</p>
+<p>具体的には、開始タグ（&lt;tag&gt;）、オプションの属性（id = ‘first’）、終了タグ（&lt;/tag&gt;）、内容（開始から終了までのすべて）で構成されている。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># すべてのHTMLページは&lt;html&gt;要素に存在し、２つの子を持つ</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>&lt;html&gt; </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>&lt;head&gt;</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a> &lt;title&gt;Page title&lt;/title&gt;</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>&lt;/head&gt;</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>&lt;body&gt; # ブラウザに表示する内容</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  &lt;h1 id='first'&gt; A heading&lt;/h1&gt;</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  &lt;p&gt;Some text <span class="dv">&amp;map;</span> &lt;b&gt;some bold text.&lt;/b&gt;&lt;/p&gt; </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  &lt;img src='myimg.png' with='100' height='100'&gt;</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>&lt;/body&gt;</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu"># &lt;p&gt;は１つの子&lt;b&gt;を持つ。&lt;b&gt;は子を持たないが、コンテンツ（テキスト「name」）を持つ。</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>&lt;p&gt;</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  Hi! My &lt;b&gt;name&lt;/b&gt; is Ken. </span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>&lt;/p&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="構成要素の例" class="level3">
+<h3 class="anchored" data-anchor-id="構成要素の例">構成要素の例</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>タグマーク&lt;,&gt;が直接使えないことによる対応</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="dv">&amp;gt;</span> : より大きい（＞） </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="dv">&amp;lt;</span> : より小さい（＜）</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="dv">&amp;amp;</span> : リテラルの＆　※ 左記のエスケープ処理を行う</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>ブロックタグ</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;html&gt;: 文書の開始と終了を示すもの。必ず２つの子を持つ。</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;haed&gt;: ページタイトルのようなドキュメントのメタデータを含む</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;body&gt;: ブラウザに表示する内容</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;h1&gt;: 見出し</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;section&gt;: セクション</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;p&gt;: パラグラフ</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;ol&gt;: 順序付きリスト</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;ul&gt;: 順不同リスト</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;li&gt;: リストの各アイテムを定義するタグ。&lt;ul&gt; タグの中に含める。</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>インラインタグ</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;b&gt;: 太字</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;i&gt;: 斜体</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>&lt;a&gt;: リンク</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="補足セクション" class="level3">
+<h3 class="anchored" data-anchor-id="補足セクション">（補足）セクション</h3>
+<p>section タグは、HTML5で導入された要素の一つで、文書のセクションを定義するために使用される。<br>
+特定のテーマやコンテンツを持つ部分を示すために用いられ、構造的にウェブページを整理するのに役立つ。</p>
+<ul>
+<li><p>味論的な要素: sectionタグは、その中に関連するコンテンツをグループ化する。<br>
+例えば、記事、章、見出しなど、独立した内容のまとまりを示します。</p></li>
+<li><p>見出しとの組み合わせ: 通常、section タグの中には見出し（h1、h2、h3 など）が含まれ、そのセクションの内容を説明する。</p></li>
+<li><p>SEOの利点: 構造的に正しいHTMLを作成することで、検索エンジンがコンテンツを理解しやすくなり、SEOに寄与する。</p></li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># article の中に２つの section があり、それぞれが異なるテーマ（HTMLとCSS）を持つ例</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>&lt;article&gt;</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    &lt;h1&gt;ウェブデザインの基本&lt;/h1&gt;</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    &lt;section&gt;</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        &lt;h2&gt;HTMLの役割&lt;/h2&gt;</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        &lt;p&gt;HTMLはウェブページの基本的な構造を提供します。&lt;/p&gt;</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    &lt;/section&gt;</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    &lt;section&gt;</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        &lt;h2&gt;CSSの役割&lt;/h2&gt;</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        &lt;p&gt;CSSはウェブページのスタイルを定義します。&lt;/p&gt;</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    &lt;/section&gt;</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>&lt;/article&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="属性" class="level3">
 <h3 class="anchored" data-anchor-id="属性">属性</h3>
-<p>タグにはname1=’value1’のような属性名を付けることができる。</p>
-<p>最も重要なのは、id属性とclass属性の２つでCSSと組み合わせて利用される。</p>
+<p>タグにはname1=‘value1’, name2=’value2’のような属性名を付けることができる。</p>
+<p>最も重要な属性は、id属性とclass属性の２つで、ページの外観を制御するためにCSS（Cascading Style Sheets）と組み合わせて利用される。</p>
+<p>属性は、リンクの宛先（&lt;a&gt;要素のhref属性）と画像のソース（&lt;img&gt;のscr属性）を記録するためにも使用される。 ### データの抽出</p>
 </section>
-<section id="データの抽出" class="level3">
-<h3 class="anchored" data-anchor-id="データの抽出">データの抽出</h3>
+</section>
+<section id="htmlの読み取り" class="level1">
+<h1>HTMLの読み取り</h1>
 <ul>
 <li>read_html(): 対象ページのURLからHTMLを読み取る</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://rvest.tidyverse.org/"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://rvest.tidyverse.org/"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{html_document}
 &lt;html lang="en"&gt;
@@ -217,16 +230,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 [2] &lt;body&gt;\n    &lt;a href="#container" class="visually-hidden-focusable"&gt;Skip t ...</code></pre>
 </div>
 </div>
-<p>rvestには、インラインでHTMLを記述できる関数がある。</p>
+<p>rvestには、インラインでHTMLを記述できる関数がある。 - minimal_html(): 最小限のHTMLドキュメントを生成する関数</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">minimal_html</span>(<span class="st">"</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;p&gt;This is paragraph&lt;/p&gt;</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;ul&gt;</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;li&gt;This is a bulleted list&lt;/li&gt;</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;/ul&gt;</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># htmlの内容を確認する</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">minimal_html</span>(<span class="st">"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;p&gt;This is paragraph&lt;/p&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;ul&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;li&gt;This is a bulleted list&lt;/li&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;/ul&gt;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{html_document}
 &lt;html&gt;
@@ -234,80 +246,82 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 [2] &lt;body&gt;\n&lt;p&gt;This is paragraph&lt;/p&gt;\n  &lt;ul&gt;\n&lt;li&gt;This is a bulleted list&lt;/li ...</code></pre>
 </div>
 </div>
-</section>
 <section id="css" class="level3">
 <h3 class="anchored" data-anchor-id="css">CSS</h3>
-<p>CSS（Cascading Style Sheets）は、ウェブページの見た目をデザインするためのスタイルシート言語。<br>
+<p>CSS（Cascading Style Sheets）は、Webページの見た目をデザインするためのスタイルシート言語。<br>
 HTMLで構造を定義した後、CSSを使って色、フォント、レイアウト、間隔などを指定することができる。</p>
 <p>CSSでは、HTML要素を選択するためのセレクタ（ミニ言語）を使う。<br>
 例えば、特定のクラスやID、タグ名を指定できる。</p>
 <ul>
-<li><p>p : 全ての</p>
-<p>
-</p><p>要素を選択する</p></li>
+<li><p>p : 全ての&lt;p&gt;要素を選択する</p></li>
 <li><p>.title : class「title」を持つすべての要素を選択する</p></li>
 <li><p>#title : 「title」と等しいid属性を持つ要素を選択する</p></li>
 <li><p>html_elements(): セクタに一致するすべての要素を検索する関数</p></li>
 <li><p>html_element(): セクタに一致する要素を検索する関数</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">minimal_html</span>(<span class="st">"</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;p&gt;This is paragraph&lt;/p&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;p id='first'&gt; This is a heading&lt;/p&gt;</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;p class='important'&gt;This is a importantparagraph&lt;/li&gt;</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># htmlの内容を確認する </span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">minimal_html</span>(<span class="st">"</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;h1&gt;This is paragraph&lt;/h1&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;p id='first'&gt; This is a heading&lt;/p&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;p class='important'&gt;This is a importantparagraph&lt;/li&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># htmlの内容を確認する </span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{html_document}
 &lt;html&gt;
 [1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
-[2] &lt;body&gt;\n&lt;p&gt;This is paragraph&lt;/p&gt;\n  &lt;p id="first"&gt; This is a heading&lt;/p&gt;\ ...</code></pre>
+[2] &lt;body&gt;\n&lt;h1&gt;This is paragraph&lt;/h1&gt;\n  &lt;p id="first"&gt; This is a heading&lt;/p ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># セクタに&lt;p&gt;タグを持つHTML要素を取得する</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>html <span class="sc">|&gt;</span> <span class="fu">html_elements</span>(<span class="st">"p"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># セレクタに&lt;p&gt;タグを持つすべての要素を取得する</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>html <span class="sc">|&gt;</span> <span class="fu">html_elements</span>(<span class="st">"p"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{xml_nodeset (3)}
-[1] &lt;p&gt;This is paragraph&lt;/p&gt;
-[2] &lt;p id="first"&gt; This is a heading&lt;/p&gt;
-[3] &lt;p class="important"&gt;This is a importantparagraph&lt;/p&gt;</code></pre>
+<pre><code>{xml_nodeset (2)}
+[1] &lt;p id="first"&gt; This is a heading&lt;/p&gt;
+[2] &lt;p class="important"&gt;This is a importantparagraph&lt;/p&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># セクタのidがfirstであるHTML要素を取得する</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>html <span class="sc">|&gt;</span> <span class="fu">html_elements</span>(<span class="st">"#first"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># セレクタにfirstと等しいid属性を持つすべての要素を取得する</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>html <span class="sc">|&gt;</span> <span class="fu">html_elements</span>(<span class="st">"#first"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{xml_nodeset (1)}
 [1] &lt;p id="first"&gt; This is a heading&lt;/p&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>html <span class="sc">|&gt;</span> <span class="fu">html_element</span>(<span class="st">"p"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># html_element()は入力と同じ数の出力を返す</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>html <span class="sc">|&gt;</span> <span class="fu">html_element</span>(<span class="st">"p"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{html_node}
-&lt;p&gt;</code></pre>
+&lt;p id="first"&gt;</code></pre>
 </div>
 </div>
 </section>
-<section id="ネストの選択" class="level3">
-<h3 class="anchored" data-anchor-id="ネストの選択">ネストの選択</h3>
+<section id="ネストの選択--サンプルサイトからのスクレイピング" class="level3">
+<h3 class="anchored" data-anchor-id="ネストの選択--サンプルサイトからのスクレイピング">ネストの選択 -サンプルサイトからのスクレイピング</h3>
 <p>「ネストの選択」とは、HTMLやCSSにおいて、要素が他の要素の内部に配置されている場合に、それらの要素を選択する方法を指す。<br>
 特に、親要素の中に子要素が含まれている場合の選択について話すことが多い。</p>
-</section>
-<section id="スターウォーズ" class="level3">
-<h3 class="anchored" data-anchor-id="スターウォーズ">スター・ウォーズ</h3>
-<p>rvest含まれているスターウォーズの事例を用いて練習する。</p>
+<p>rvest含まれているスター・ウォーズの例で練習する。<br>
+<a href="http://127.0.0.1:27642/library/rvest/doc/starwars.html">http://127.0.0.1:27642/library/rvest/doc/starwars.html</a></p>
 <ul>
-<li>vinette(): 特定のパッケージに関する詳細な説明や使用例を提供する文書を開くために使われる関数。ヴィネットと読む。</li>
+<li>vinette(): ヴィネット関数。特定のパッケージに関する詳細な説明や使用例を提供する文書を開くために使われる関数。</li>
 <li>html_text2(): HTMLのプレーンテキストを取得する関数</li>
 </ul>
-<div class="sourceCode" id="cb20"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>vignette("starwars")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>vignette("starwars")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>例えば、キャラクターの名前を抽出するためには、html_elemtns()の出力結果に対して、html_element()を使う。<br>
+これにより、html_element()は要素ごとに１つの応答を返す。</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># HTMLを読み込む</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"http://127.0.0.1:27642/library/rvest/doc/starwars.html"</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 全ての&lt;section&gt;要素を抽出する</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>section <span class="ot">&lt;-</span> html <span class="sc">|&gt;</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"section"</span>)</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>section</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># HTMLを読み込む</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"http://127.0.0.1:27642/library/rvest/doc/starwars.html"</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{html_document}
+&lt;html&gt;
+[1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
+[2] &lt;body&gt;\n\n\n\n\n&lt;h1 class="title toc-ignore"&gt;Star Wars films&lt;/h1&gt;\n\n\n\n ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># html_elements()で全ての&lt;section&gt;要素を抽出して結果をsectionに代入する</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>section <span class="ot">&lt;-</span> html <span class="sc">|&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"section"</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>section</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{xml_nodeset (7)}
 [1] &lt;section&gt;&lt;h2 data-id="1"&gt;\nThe Phantom Menace\n&lt;/h2&gt;\n&lt;p&gt;\nReleased: 1999 ...
@@ -318,25 +332,28 @@ HTMLで構造を定義した後、CSSを使って色、フォント、レイア�
 [6] &lt;section&gt;&lt;h2 data-id="6"&gt;\nReturn of the Jedi\n&lt;/h2&gt;\n&lt;p&gt;\nReleased: 1983 ...
 [7] &lt;section&gt;&lt;h2 data-id="7"&gt;\nThe Force Awakens\n&lt;/h2&gt;\n&lt;p&gt;\nReleased: 2015- ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 全ての&lt;h2&gt;要素を抽出する</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>section <span class="sc">|&gt;</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">"h2"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>() <span class="co"># プレーンテキストを抽出する</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># html_element()で&lt;h2&gt;要素を１つずつ抽出する</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>section <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">"h2"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>() <span class="co"># プレーンテキストを抽出する</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "The Phantom Menace"      "Attack of the Clones"   
 [3] "Revenge of the Sith"     "A New Hope"             
 [5] "The Empire Strikes Back" "Return of the Jedi"     
 [7] "The Force Awakens"      </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 全ての&lt;.director&gt;要素を抽出する</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>section <span class="sc">|&gt;</span> </span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">".director"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>() <span class="co"># プレーンテキストを抽出する</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># html_element()で&lt;.director&gt;要素を１つずつ抽出する</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>section <span class="sc">|&gt;</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">".director"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>() <span class="co"># プレーンテキストを抽出する</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "George Lucas"     "George Lucas"     "George Lucas"     "George Lucas"    
 [5] "Irvin Kershner"   "Richard Marquand" "J. J. Abrams"    </code></pre>
 </div>
 </div>
+</section>
+<section id="tibbleにまとめる" class="level3">
+<h3 class="anchored" data-anchor-id="tibbleにまとめる">tibbleにまとめる</h3>
 <p>tibble()関数を使って、データフレーム（starwars_df）を作成する。</p>
 <ul>
 <li><p>title: html_element(“h2”)を使って、各セクション内の”h2”要素（タイトル）を抽出し、html_text2()でそのテキストを取得する。</p></li>
@@ -347,29 +364,31 @@ HTMLで構造を定義した後、CSSを使って色、フォント、レイア�
 <li><p>intro: html_element(“.crawl”)を使って、クラス名がcrawlの要素を取得し、html_text2()でそのテキストを取得する。</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"http://127.0.0.1:27642/library/rvest/doc/starwars.html"</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>section <span class="ot">&lt;-</span> html <span class="sc">|&gt;</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"section"</span>)</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果をtibbleにまとめる</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>starwars_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> section <span class="sc">|&gt;</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_element</span>(<span class="st">"h2"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_text2</span>(),</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">released =</span> section <span class="sc">|&gt;</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_element</span>(<span class="st">"p"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_text2</span>() <span class="sc">|&gt;</span></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_remove</span>(<span class="st">"Released: "</span>) <span class="sc">|&gt;</span> <span class="co"># リリースの日付から「Released: 」という文字列を取り除く</span></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">parse_date</span>(), <span class="co"># 抽出した日付文字列を日付オブジェクトに変換</span></span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">director =</span> section <span class="sc">|&gt;</span></span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_element</span>(<span class="st">".director"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_text2</span>(),</span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">intro =</span> section <span class="sc">|&gt;</span></span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_element</span>(<span class="st">".crawl"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_text2</span>()</span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>starwars_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"http://127.0.0.1:27642/library/rvest/doc/starwars.html"</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># html_elements()ですべての&lt;section&gt;要素を抽出して結果をsectionに代入する</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>section <span class="ot">&lt;-</span> html <span class="sc">|&gt;</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"section"</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果をtibbleにまとめる</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>starwars_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> section <span class="sc">|&gt;</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_element</span>(<span class="st">"h2"</span>) <span class="sc">|&gt;</span> <span class="co"># html_element()で&lt;h2&gt;要素を１つずつ抽出する</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_text2</span>(), <span class="co"># プレーンテキストの内容を抽出する</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">released =</span> section <span class="sc">|&gt;</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_element</span>(<span class="st">"p"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_text2</span>() <span class="sc">|&gt;</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_remove</span>(<span class="st">"Released: "</span>) <span class="sc">|&gt;</span> <span class="co"># リリースの日付から「Released: 」という文字列を取り除く</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">parse_date</span>(), <span class="co"># 抽出した日付文字列を日付オブジェクトに変換</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">director =</span> section <span class="sc">|&gt;</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_element</span>(<span class="st">".director"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_text2</span>(),</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">intro =</span> section <span class="sc">|&gt;</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_element</span>(<span class="st">".crawl"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_text2</span>()</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>starwars_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 × 4
   title                   released   director         intro                     
@@ -384,28 +403,155 @@ HTMLで構造を定義した後、CSSを使って色、フォント、レイア�
 </div>
 </div>
 </section>
-<section id="セクション" class="level3">
-<h3 class="anchored" data-anchor-id="セクション">セクション</h3>
-<p>section タグは、HTML5で導入された要素の一つで、文書のセクションを定義するために使用される。<br>
-特定のテーマやコンテンツを持つ部分を示すために用いられ、構造的にウェブページを整理するのに役立つ。</p>
+<section id="テーブル" class="level3">
+<h3 class="anchored" data-anchor-id="テーブル">テーブル</h3>
+<p>データがHTMLテーブルに格納されている場合がある。<br>
+HTMLテーブルは、&lt;table&gt;, &lt;tr&gt;（テーブル行）, &lt;th&gt;（テーブル見出し）, &lt;td&gt;（テーブルデータ）の４つの主要な要素から構成されている。</p>
 <ul>
-<li><p>味論的な要素: sectionタグは、その中に関連するコンテンツをグループ化する。<br>
-例えば、記事、章、見出しなど、独立した内容のまとまりを示します。</p></li>
-<li><p>見出しとの組み合わせ: 通常、section タグの中には見出し（h1、h2、h3 など）が含まれ、そのセクションの内容を説明する。</p></li>
-<li><p>SEOの利点: 構造的に正しいHTMLを作成することで、検索エンジンがコンテンツを理解しやすくなり、SEOに寄与する。</p></li>
+<li>html_table(): HTMLテーブルを読み込む関数</li>
 </ul>
-<p>この例では、article の中に二つの section があり、それぞれが異なるテーマ（HTMLとCSS）を持っている。</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>&lt;article&gt;</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    &lt;h1&gt;ウェブデザインの基本&lt;/h1&gt;</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    &lt;section&gt;</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>        &lt;h2&gt;HTMLの役割&lt;/h2&gt;</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>        &lt;p&gt;HTMLはウェブページの基本的な構造を提供します。&lt;/p&gt;</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    &lt;/section&gt;</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    &lt;section&gt;</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>        &lt;h2&gt;CSSの役割&lt;/h2&gt;</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>        &lt;p&gt;CSSはウェブページのスタイルを定義します。&lt;/p&gt;</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    &lt;/section&gt;</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>&lt;/article&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">minimal_html</span>(<span class="st">"</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;table class='mytable'&gt;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;tr&gt;&lt;th&gt;x&lt;/th&gt;    &lt;th&gt;y&lt;/th&gt;&lt;/tr&gt;</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;tr&gt;&lt;td&gt;1.5&lt;/td&gt;  &lt;td&gt;2.7&lt;/td&gt;&lt;/tr&gt;</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;tr&gt;&lt;td&gt;4.9&lt;/td&gt;  &lt;td&gt;1.3&lt;/td&gt;&lt;/tr&gt;</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;tr&gt;&lt;td&gt;7.2&lt;/td&gt;  &lt;td&gt;8.1&lt;/td&gt;&lt;/tr&gt;</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;/table&gt;</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="st">  "</span>)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{html_document}
+&lt;html&gt;
+[1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
+[2] &lt;body&gt;&lt;table class="mytable"&gt;\n&lt;tr&gt;\n&lt;th&gt;x&lt;/th&gt;    &lt;th&gt;y&lt;/th&gt;\n&lt;/tr&gt;\n&lt;tr ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># html_elements()で抽出するテーブルを識別する</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>html <span class="sc">|&gt;</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">".mytable"</span>) <span class="sc">|&gt;</span> <span class="co"># .（ドット）はクラス名を指定する</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+# A tibble: 3 × 2
+      x     y
+  &lt;dbl&gt; &lt;dbl&gt;
+1   1.5   2.7
+2   4.9   1.3
+3   7.2   8.1</code></pre>
+</div>
+</div>
+</section>
+<section id="imdｂ人気映画ランキングからのスクレイピング" class="level3">
+<h3 class="anchored" data-anchor-id="imdｂ人気映画ランキングからのスクレイピング">IMDｂ人気映画ランキングからのスクレイピング</h3>
+<p>IMDbから上位250本の映画を抽出する。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://www.imdb.com/chart/top/"</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>html</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{html_document}
+&lt;html lang="en-US" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml"&gt;
+[1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...
+[2] &lt;body&gt;\n&lt;div&gt;    &lt;img height="1" width="1" style="display:none;visibility ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># タイトルの抽出</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>title <span class="ot">&lt;-</span> html <span class="sc">|&gt;</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"h3"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 公開年の抽出</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>year <span class="ot">&lt;-</span> html <span class="sc">|&gt;</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"span.sc-ab348ad5-8.cSWcJI.cli-title-metadata-item"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>year</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "1994"   "2h 22m" "G"      "1972"   "2h 55m" "G"      "2008"   "2h 32m"
+ [9] "G"      "1974"   "3h 22m" "R-15"   "1957"   "1h 36m" "G"      "2003"  
+[17] "3h 21m" "PG-12"  "1993"   "3h 15m" "R15+"   "1994"   "2h 34m" "R-15"  
+[25] "2001"   "2h 58m" "G"      "1966"   "2h 41m" "G"      "1994"   "2h 22m"
+[33] "PG12"   "2002"   "2h 59m" "PG-12"  "1999"   "2h 19m" "R15+"   "2010"  
+[41] "2h 28m" "G"      "1980"   "2h 4m"  "G"      "1999"   "2h 16m" "G"     
+[49] "1990"   "2h 25m" "PG-12"  "1975"   "2h 13m" "G"      "2014"   "2h 49m"
+[57] "G"      "1995"   "2h 7m"  "R18+"   "1946"   "2h 10m" "G"      "1954"  
+[65] "3h 27m" "G"      "1991"   "1h 58m" "R-15"   "1998"   "2h 49m" "R-15"  
+[73] "2002"   "2h 10m" "R-15"  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 評価の抽出</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>rating <span class="ot">&lt;-</span> html <span class="sc">|&gt;</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"span.ipc-rating-star--rating"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>rating</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "9.3" "9.2" "9.0" "9.0" "9.0" "9.0" "9.0" "8.9" "8.9" "8.8" "8.8" "8.8"
+[13] "8.8" "8.8" "8.7" "8.7" "8.7" "8.7" "8.7" "8.6" "8.6" "8.6" "8.6" "8.6"
+[25] "8.6"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># title ベクターをデータフレームに変換</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>title_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">title =</span> title)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>year_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">year =</span> year)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>rating_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">rating =</span> rating)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="co"># データを成形</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>rankings_df <span class="ot">&lt;-</span> title_df <span class="sc">|&gt;</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(title <span class="sc">!=</span> <span class="st">"IMDb Charts"</span>) <span class="sc">|&gt;</span>  <span class="co"># 不要な行を除去</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    title,</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"ranking"</span>, <span class="st">"title"</span>),</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">" "</span>,  <span class="co"># 最初のスペースで分割</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">extra =</span> <span class="st">"merge"</span>,  <span class="co"># 残りの部分をマージ</span></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"right"</span>  <span class="co"># 不足分をNAで埋める</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">ranking =</span> <span class="fu">parse_number</span>(ranking),</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There was 1 warning in `mutate()`.
+ℹ In argument: `ranking = parse_number(ranking)`.
+Caused by warning:
+! 1 parsing failure.
+row col expected   actual
+ 26  -- a number Recently</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>rankings_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 26 × 2
+   ranking title                         
+     &lt;dbl&gt; &lt;chr&gt;                         
+ 1       1 Shôshanku no sora ni          
+ 2       2 Godfather                     
+ 3       3 Dâku naito                    
+ 4       4 Godfather Part II             
+ 5       5 12 Angry Men                  
+ 6       6 Rôdo obu za ringu - Ô no kikan
+ 7       7 Schindler's List              
+ 8       8 Pulp Fiction                  
+ 9       9 Lord of the Rings             
+10      10 Zoku yuuhi no ganman          
+# ℹ 16 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="cssセレクタと.ドット" class="level3">
+<h3 class="anchored" data-anchor-id="cssセレクタと.ドット">CSSセレクタと.（ドット）</h3>
+<p>CSSセレクタにおいて、.（ドット）はクラス名を指定するためのプレフィックス。</p>
+<p>クラスを指定する場合: クラス名の前には必ず . を付ける。</p>
+<ul>
+<li>例: クラス名が example の要素を選択する場合、.example と書く。<br>
+複数のクラスを指定する場合: 空白を入れずに、クラス名を . で連結する。<br>
+</li>
+<li>例: class=“class1 class2” という要素を選択する場合、.class1.class2 と書く。</li>
+</ul>
+<p>例えば、&lt;span&gt; 要素に含まれる「年」を取得する場合、要素自体はHTMLのタグであり、クラスではない。したがって、クラス名を指定する際には、&lt;span&gt; タグの前にドット（.）を付ける必要はない。</p>
+<p>なお、&lt;span&gt; は、HTMLにおけるインライン要素の一つで、主に文書の特定の部分をグループ化するために使用する。</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># 対象の要素が含まれたhtml</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>&lt;span class="sc-ab348ad5-8 cSWcJI cli-title-metadata-item"&gt;1994&lt;/span&gt;</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu"># &lt;span&gt; 要素から、年を抽出する場合</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>years &lt;- html |&gt;</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  html_elements("span.sc-ab348ad5-8.cSWcJI.cli-title-metadata-item") |&gt;  # 複数のクラスを指定</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  html_text2()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 

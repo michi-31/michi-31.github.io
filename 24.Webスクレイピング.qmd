@@ -15,36 +15,41 @@ rvestを用いたWebスクレイピングについて学ぶ。
 
 ### 準備
 rvestはtidyverseのパッケージの一つだが、コアパッケージではないため、明示的に読み込む必要がある。  
-
-また、データ処理のためにtidyverseも読み込む。
 ```{r}
-library(tidyverse)
+library(tidyverse) # tidyverseはスクレイピング後のデータ処理に使う
 library(rvest)
 ```
 
 # HTMLの基本
-HTMLは要素によって形成される階層構造を持っている。
-- 開始タグ: <tag>
-- 属性: id = 'first'
-- 終了タグ : </tag>
-- 内容: 開始から終了までの内容
+HTM（HyperText Markup Language）は、Webページを記述する言語で、要素によって形成される階層構造を持っている。  
+
+具体的には、開始タグ（&lt;tag&gt;）、オプションの属性（id = 'first'）、終了タグ（&lt;/tag&gt;）、内容（開始から終了までのすべて）で構成されている。  
+
 ```markdown
+# すべてのHTMLページは<html>要素に存在し、２つの子を持つ
 <html> 
-<head> # ページタイトルのようなドキュメントのメタデータ
+<head>
  <title>Page title</title>
 </head>
 <body> # ブラウザに表示する内容
-  <h1 id='first'> A heading</h1> # h1:見出し
-  <p>Some text &map; <b>some bold text.</b></p> # p: パラグラフ、b:太字
+  <h1 id='first'> A heading</h1>
+  <p>Some text &map; <b>some bold text.</b></p> 
   <img src='myimg.png' with='100' height='100'>
 </body>
+
+---
+# <p>は１つの子<b>を持つ。<b>は子を持たないが、コンテンツ（テキスト「name」）を持つ。
+<p>
+  Hi! My <b>name</b> is Ken. 
+</p>
 ```
-### 細かな構成要素
+
+### 構成要素の例
 ```markdown
-<,>が使えないことによる対応
+タグマーク<,>が直接使えないことによる対応
 - &gt; : より大きい（＞） 
 - &lt; : より小さい（＜）
-- &amp; : リテラルの＆
+- &amp; : リテラルの＆　※ 左記のエスケープ処理を行う
 
 ブロックタグ
 - <html>: 文書の開始と終了を示すもの。必ず２つの子を持つ。
@@ -63,26 +68,49 @@ HTMLは要素によって形成される階層構造を持っている。
 - <a>: リンク
 ```
 
-テキストの段落が含まれ１つの単語が太字になっている。  
+### （補足）セクション
+section タグは、HTML5で導入された要素の一つで、文書のセクションを定義するために使用される。  
+特定のテーマやコンテンツを持つ部分を示すために用いられ、構造的にウェブページを整理するのに役立つ。
+
+- 味論的な要素: sectionタグは、その中に関連するコンテンツをグループ化する。  
+  例えば、記事、章、見出しなど、独立した内容のまとまりを示します。
+
+- 見出しとの組み合わせ: 通常、section タグの中には見出し（h1、h2、h3 など）が含まれ、そのセクションの内容を説明する。
+
+- SEOの利点: 構造的に正しいHTMLを作成することで、検索エンジンがコンテンツを理解しやすくなり、SEOに寄与する。
+
 ```markdown
-<p> # <p>には<b>という１つの子がある
-Hi! My <b>name</b> is Ken. # <b>には子はないが、コンテンツ（テキスト）がある
-</p>
+# article の中に２つの section があり、それぞれが異なるテーマ（HTMLとCSS）を持つ例
+
+<article>
+    <h1>ウェブデザインの基本</h1>
+    <section>
+        <h2>HTMLの役割</h2>
+        <p>HTMLはウェブページの基本的な構造を提供します。</p>
+    </section>
+    <section>
+        <h2>CSSの役割</h2>
+        <p>CSSはウェブページのスタイルを定義します。</p>
+    </section>
+</article>
 ```
 
 ### 属性
-タグにはname1='value1'のような属性名を付けることができる。  
+タグにはname1='value1', name2='value2'のような属性名を付けることができる。  
 
-最も重要なのは、id属性とclass属性の２つでCSSと組み合わせて利用される。 
+最も重要な属性は、id属性とclass属性の２つで、ページの外観を制御するためにCSS（Cascading Style Sheets）と組み合わせて利用される。 
 
+属性は、リンクの宛先（&lt;a&gt;要素のhref属性）と画像のソース（&lt;img&gt;のscr属性）を記録するためにも使用される。
 ### データの抽出
+
+# HTMLの読み取り
 - read_html(): 対象ページのURLからHTMLを読み取る
 ```{r}
 html <- read_html("https://rvest.tidyverse.org/")
-
 html
 ```
 rvestには、インラインでHTMLを記述できる関数がある。
+- minimal_html(): 最小限のHTMLドキュメントを生成する関数
 ```{r}
 html <- minimal_html("
   <p>This is paragraph</p>
@@ -90,18 +118,17 @@ html <- minimal_html("
     <li>This is a bulleted list</li>
   </ul>
 ")
-# htmlの内容を確認する
 html
 ```
 
 ### CSS
-CSS（Cascading Style Sheets）は、ウェブページの見た目をデザインするためのスタイルシート言語。  
+CSS（Cascading Style Sheets）は、Webページの見た目をデザインするためのスタイルシート言語。  
 HTMLで構造を定義した後、CSSを使って色、フォント、レイアウト、間隔などを指定することができる。  
 
 CSSでは、HTML要素を選択するためのセレクタ（ミニ言語）を使う。  
 例えば、特定のクラスやID、タグ名を指定できる。
 
-- p : 全ての<p>要素を選択する
+- p : 全ての&lt;p&gt;要素を選択する
 - .title : class「title」を持つすべての要素を選択する
 - #title : 「title」と等しいid属性を持つ要素を選択する
 
@@ -109,57 +136,61 @@ CSSでは、HTML要素を選択するためのセレクタ（ミニ言語）を�
 - html_element(): セクタに一致する要素を検索する関数
 ```{r}
 html <- minimal_html("
-  <p>This is paragraph</p>
+  <h1>This is paragraph</h1>
   <p id='first'> This is a heading</p>
   <p class='important'>This is a importantparagraph</li>
 ")
 # htmlの内容を確認する 
 html
 
-# セクタに<p>タグを持つHTML要素を取得する
+# セレクタに<p>タグを持つすべての要素を取得する
 html |> html_elements("p") 
 
-# セクタのidがfirstであるHTML要素を取得する
+# セレクタにfirstと等しいid属性を持つすべての要素を取得する
 html |> html_elements("#first") 
 
-# 
+# html_element()は入力と同じ数の出力を返す
 html |> html_element("p") 
 ```
 
-### ネストの選択
+### ネストの選択 -サンプルサイトからのスクレイピング
 「ネストの選択」とは、HTMLやCSSにおいて、要素が他の要素の内部に配置されている場合に、それらの要素を選択する方法を指す。  
 特に、親要素の中に子要素が含まれている場合の選択について話すことが多い。
 
-### スター・ウォーズ
-rvest含まれているスターウォーズの事例を用いて練習する。
+rvest含まれているスター・ウォーズの例で練習する。  
+[http://127.0.0.1:27642/library/rvest/doc/starwars.html](http://127.0.0.1:27642/library/rvest/doc/starwars.html)
 
-- vinette(): 特定のパッケージに関する詳細な説明や使用例を提供する文書を開くために使われる関数。ヴィネットと読む。
+- vinette(): ヴィネット関数。特定のパッケージに関する詳細な説明や使用例を提供する文書を開くために使われる関数。
 - html_text2(): HTMLのプレーンテキストを取得する関数
 ```markdown
 vignette("starwars")
 ```
+
+例えば、キャラクターの名前を抽出するためには、html_elemtns()の出力結果に対して、html_element()を使う。  
+これにより、html_element()は要素ごとに１つの応答を返す。
 ```{r}
 # HTMLを読み込む
 url <- "http://127.0.0.1:27642/library/rvest/doc/starwars.html"
 html <- read_html(url)
+html
 
-# 全ての<section>要素を抽出する
+# html_elements()で全ての<section>要素を抽出して結果をsectionに代入する
 section <- html |>
   html_elements("section")
 section
 
-# 全ての<h2>要素を抽出する
+# html_element()で<h2>要素を１つずつ抽出する
 section |>
   html_element("h2") |>
   html_text2() # プレーンテキストを抽出する
 
-# 全ての<.director>要素を抽出する
+# html_element()で<.director>要素を１つずつ抽出する
 section |> 
   html_element(".director") |>
   html_text2() # プレーンテキストを抽出する
 ```
 
-
+### tibbleにまとめる
 tibble()関数を使って、データフレーム（starwars_df）を作成する。
 
 - title: html_element("h2")を使って、各セクション内の"h2"要素（タイトル）を抽出し、html_text2()でそのテキストを取得する。
@@ -175,16 +206,18 @@ tibble()関数を使って、データフレーム（starwars_df）を作成す�
 ```{r}
 url <- "http://127.0.0.1:27642/library/rvest/doc/starwars.html"
 html <- read_html(url)
+
+# html_elements()ですべての<section>要素を抽出して結果をsectionに代入する
 section <- html |>
   html_elements("section")
 
 # 結果をtibbleにまとめる
 starwars_df <- tibble(
   title = section |>
-    html_element("h2") |>
-    html_text2(),
+    html_element("h2") |> # html_element()で<h2>要素を１つずつ抽出する
+    html_text2(), # プレーンテキストの内容を抽出する
   released = section |>
-    html_element("p") |>
+    html_element("p") |> 
     html_text2() |>
     str_remove("Released: ") |> # リリースの日付から「Released: 」という文字列を取り除く
     parse_date(), # 抽出した日付文字列を日付オブジェクトに変換
@@ -198,28 +231,94 @@ starwars_df <- tibble(
 starwars_df
 ```
 
-### セクション
-section タグは、HTML5で導入された要素の一つで、文書のセクションを定義するために使用される。  
-特定のテーマやコンテンツを持つ部分を示すために用いられ、構造的にウェブページを整理するのに役立つ。
+### テーブル
+データがHTMLテーブルに格納されている場合がある。  
+HTMLテーブルは、&lt;table&gt;, &lt;tr&gt;（テーブル行）, &lt;th&gt;（テーブル見出し）, &lt;td&gt;（テーブルデータ）の４つの主要な要素から構成されている。
 
-- 味論的な要素: sectionタグは、その中に関連するコンテンツをグループ化する。  
-  例えば、記事、章、見出しなど、独立した内容のまとまりを示します。
+- html_table(): HTMLテーブルを読み込む関数
+```{r}
+html <- minimal_html("
+  <table class='mytable'>
+    <tr><th>x</th>    <th>y</th></tr>
+    <tr><td>1.5</td>  <td>2.7</td></tr>
+    <tr><td>4.9</td>  <td>1.3</td></tr>
+    <tr><td>7.2</td>  <td>8.1</td></tr>
+  </table>
+  ")
+html
 
-- 見出しとの組み合わせ: 通常、section タグの中には見出し（h1、h2、h3 など）が含まれ、そのセクションの内容を説明する。
+# html_elements()で抽出するテーブルを識別する
+html |>
+  html_elements(".mytable") |> # .（ドット）はクラス名を指定する
+  html_table()
+```
 
-- SEOの利点: 構造的に正しいHTMLを作成することで、検索エンジンがコンテンツを理解しやすくなり、SEOに寄与する。
+### IMDｂ人気映画ランキングからのスクレイピング
+IMDbから上位250本の映画を抽出する。  
 
-この例では、article の中に二つの section があり、それぞれが異なるテーマ（HTMLとCSS）を持っている。
+```{r}
+url <- "https://www.imdb.com/chart/top/"
+html <- read_html(url)
+html
+
+# タイトルの抽出
+title <- html |>
+  html_elements("h3") |> 
+  html_text2()
+
+# 公開年の抽出
+year <- html |>
+  html_elements("span.sc-ab348ad5-8.cSWcJI.cli-title-metadata-item") |> 
+  html_text2()
+year
+
+# 評価の抽出
+rating <- html |>
+  html_elements("span.ipc-rating-star--rating") |> 
+  html_text2()
+rating
+```
+
+```{r}
+# title ベクターをデータフレームに変換
+title_df <- tibble(title = title)
+year_df <- tibble(year = year)
+rating_df <- tibble(rating = rating)
+
+# データを成形
+rankings_df <- title_df |>
+  filter(title != "IMDb Charts") |>  # 不要な行を除去
+  separate(
+    title,
+    into = c("ranking", "title"),
+    sep = " ",  # 最初のスペースで分割
+    extra = "merge",  # 残りの部分をマージ
+    fill = "right"  # 不足分をNAで埋める
+  ) |>
+  mutate(
+    ranking = parse_number(ranking),
+  )
+rankings_df
+```
+
+### CSSセレクタと.（ドット）
+CSSセレクタにおいて、.（ドット）はクラス名を指定するためのプレフィックス。  
+
+クラスを指定する場合: クラス名の前には必ず . を付ける。  
+
+- 例: クラス名が example の要素を選択する場合、.example と書く。  
+複数のクラスを指定する場合: 空白を入れずに、クラス名を . で連結する。  
+- 例: class="class1 class2" という要素を選択する場合、.class1.class2 と書く。  
+
+例えば、&lt;span&gt; 要素に含まれる「年」を取得する場合、要素自体はHTMLのタグであり、クラスではない。したがって、クラス名を指定する際には、&lt;span&gt; タグの前にドット（.）を付ける必要はない。
+
+なお、&lt;span&gt; は、HTMLにおけるインライン要素の一つで、主に文書の特定の部分をグループ化するために使用する。
 ```markdown
-<article>
-    <h1>ウェブデザインの基本</h1>
-    <section>
-        <h2>HTMLの役割</h2>
-        <p>HTMLはウェブページの基本的な構造を提供します。</p>
-    </section>
-    <section>
-        <h2>CSSの役割</h2>
-        <p>CSSはウェブページのスタイルを定義します。</p>
-    </section>
-</article>
+# 対象の要素が含まれたhtml
+<span class="sc-ab348ad5-8 cSWcJI cli-title-metadata-item">1994</span>
+
+# <span> 要素から、年を抽出する場合
+years <- html |>
+  html_elements("span.sc-ab348ad5-8.cSWcJI.cli-title-metadata-item") |>  # 複数のクラスを指定
+  html_text2()
 ```
