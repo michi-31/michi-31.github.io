@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-10-02">
+<meta name="dcterms.date" content="2024-10-04">
 
-<title>R、Pythonを用いた統計分析等について</title>
+<title>作業メモ</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,19 +21,53 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="index_files/libs/clipboard/clipboard.min.js"></script>
-<script src="index_files/libs/quarto-html/quarto.js"></script>
-<script src="index_files/libs/quarto-html/popper.min.js"></script>
-<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="index_files/libs/quarto-html/anchor.min.js"></script>
-<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="memo_files/libs/clipboard/clipboard.min.js"></script>
+<script src="memo_files/libs/quarto-html/quarto.js"></script>
+<script src="memo_files/libs/quarto-html/popper.min.js"></script>
+<script src="memo_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="memo_files/libs/quarto-html/anchor.min.js"></script>
+<link href="memo_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="memo_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="memo_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="memo_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="memo_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -46,20 +80,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#概要" id="toc-概要" class="nav-link active" data-scroll-target="#概要">概要</a></li>
-  <li><a href="#目次" id="toc-目次" class="nav-link" data-scroll-target="#目次">目次</a>
-  <ul class="collapse">
-  <li><a href="#1-github" id="toc-1-github" class="nav-link" data-scroll-target="#1-github">1. GitHub</a></li>
-  <li><a href="#2-r" id="toc-2-r" class="nav-link" data-scroll-target="#2-r">2. R</a>
-  <ul class="collapse">
-  <li><a href="#rデータサイエンス" id="toc-rデータサイエンス" class="nav-link" data-scroll-target="#rデータサイエンス">R×データサイエンス</a></li>
-  <li><a href="#r実証分析" id="toc-r実証分析" class="nav-link" data-scroll-target="#r実証分析">R×実証分析</a></li>
-  </ul></li>
-  <li><a href="#3-python" id="toc-3-python" class="nav-link" data-scroll-target="#3-python">3. Python</a></li>
-  <li><a href="#4-計量経済学" id="toc-4-計量経済学" class="nav-link" data-scroll-target="#4-計量経済学">4. 計量経済学</a></li>
-  <li><a href="#5-データサイエンス" id="toc-5-データサイエンス" class="nav-link" data-scroll-target="#5-データサイエンス">5. データサイエンス</a></li>
-  <li><a href="#6-その他" id="toc-6-その他" class="nav-link" data-scroll-target="#6-その他">6. その他</a></li>
-  </ul></li>
+  <li><a href="#目的" id="toc-目的" class="nav-link active" data-scroll-target="#目的">目的</a></li>
   </ul>
 </nav>
 </div>
@@ -67,7 +88,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">R、Pythonを用いた統計分析等について</h1>
+<h1 class="title">作業メモ</h1>
 </div>
 
 
@@ -78,7 +99,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 2, 2024</p>
+      <p class="date">October 4, 2024</p>
     </div>
   </div>
   
@@ -90,84 +111,124 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="概要" class="level1">
-<h1>概要</h1>
-<p>ここでは、R、Pythonを用いた統計分析や経済学の知識、コード管理の手法としてのGitHubの基本的な使い方を整理します。</p>
-</section>
-<section id="目次" class="level1">
-<h1>目次</h1>
-<ol type="1">
-<li><a href="#1-github">GitHub</a></li>
-<li><a href="#2-r">R</a></li>
-<li><a href="#3-python">Python</a></li>
-<li><a href="#4-計量経済学">計量経済学</a></li>
-<li><a href="#5-データサイエンス">データサイエンス</a></li>
-<li><a href="#6-その他">その他</a></li>
-</ol>
-<section id="1-github" class="level2">
-<h2 class="anchored" data-anchor-id="1-github">1. GitHub</h2>
-<p>GitHubの基本的な使い方を整理します。</p>
-<ul>
-<li><a href="git_memo.html">GitHubについて</a></li>
-</ul>
-</section>
-<section id="2-r" class="level2">
-<h2 class="anchored" data-anchor-id="2-r">2. R</h2>
-<p>Rの基本的な使い方を整理します。</p>
-<section id="rデータサイエンス" class="level3">
-<h3 class="anchored" data-anchor-id="rデータサイエンス">R×データサイエンス</h3>
-<ul>
-<li><a href="0.R.html">0.Rについて</a></li>
-<li><a href="1.データの可視化.html">1.データの可視化</a></li>
-<li><a href="2.基本.html">2.基本</a></li>
-<li><a href="3.データ変換.html">3.データ変換</a></li>
-<li><a href="4.コードスタイル.html">4.コードスタイル</a></li>
-<li><a href="5.データの整理.html">5.データの整理</a></li>
-<li><a href="6.スクリプトとプロジェクト.html">6.スクリプトとプロジェクト</a></li>
-<li><a href="7.データインポート.html">7.データインポート</a></li>
-<li><a href="9.レイヤ.html">9.レイヤ</a></li>
-<li><a href="24.Webスクレイピング.html">24.Webスクレイピング</a></li>
-</ul>
-</section>
-<section id="r実証分析" class="level3">
-<h3 class="anchored" data-anchor-id="r実証分析">R×実証分析</h3>
-<ul>
-<li><a href="1.回帰分析の目的.html">1.回帰分析の目的</a></li>
-<li><a href="2.統計の基礎知識.html">2.統計の基礎知識</a></li>
-</ul>
-</section>
-</section>
-<section id="3-python" class="level2">
-<h2 class="anchored" data-anchor-id="3-python">3. Python</h2>
-<p>Pythonの基本的な使い方を整理します。</p>
-<ul>
-<li><a href="section1.html">Pythonについて</a></li>
-</ul>
-</section>
-<section id="4-計量経済学" class="level2">
-<h2 class="anchored" data-anchor-id="4-計量経済学">4. 計量経済学</h2>
-<p>計量経済学の基本的な知識を整理します。</p>
-<ul>
-<li><a href="section1.html">計量経済学について</a></li>
-</ul>
-</section>
-<section id="5-データサイエンス" class="level2">
-<h2 class="anchored" data-anchor-id="5-データサイエンス">5. データサイエンス</h2>
-<p>データサイエンスの基本的な知識を整理します。</p>
-<ul>
-<li><a href="section1.html">データサイエンスについて</a></li>
-</ul>
-</section>
-<section id="6-その他" class="level2">
-<h2 class="anchored" data-anchor-id="6-その他">6. その他</h2>
-<p>その他、関連知識を整理します。</p>
-<ul>
-<li><a href="中古マンションの価格予測.html">中古マンションの価格予測</a></li>
-<li><a href="shortcut.html">VS Codeショートカット一覧</a></li>
-<li><a href="section1.html">応用一般均衡モデルについて</a></li>
-<li><a href="memo.html">メモ</a></li>
-</ul>
-</section>
+<section id="目的" class="level1">
+<h1>目的</h1>
+<p>作業メモをの存する。</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2005年の産業連関表から13部門表を読み込み</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://www.e-stat.go.jp/stat-search/file-download?statInfId=000014890374&amp;fileKind=0"</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 一時ファイルに保存</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>temp_file <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".xls"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Excelファイルをダウンロード</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">GET</span>(url, <span class="fu">write_disk</span>(temp_file))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Response [https://www.e-stat.go.jp/stat-search/file-download?statInfId=000014890374&amp;fileKind=0]
+  Date: 2024-10-04 11:31
+  Status: 200
+  Content-Type: application/octet-stream
+  Size: 28.2 kB
+&lt;ON DISK&gt;  C:\Users\harad\AppData\Local\Temp\RtmpYDEhIc\file2d983fa9761d.xls</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Excelファイルを読み込む</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(temp_file, <span class="at">skip =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+• `` -&gt; `...1`
+• `` -&gt; `...2`
+• `` -&gt; `...34`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 24
+Columns: 33
+$ ...2                     &lt;chr&gt; "農林水産業", "鉱業", "製造業", "建設", "電力…
+$ 農林水産業               &lt;dbl&gt; 1643017, 626, 2563648, 65697, 112781, 543366,…
+$ 鉱業                     &lt;dbl&gt; 504, 3019, 69702, 6518, 38967, 25953, 70008, …
+$ 製造業                   &lt;dbl&gt; 7798233, 12638103, 132427045, 1197953, 557415…
+$ 建設                     &lt;dbl&gt; 87905, 502664, 17967519, 143850, 404946, 4123…
+$ `電力・ガス・水道`       &lt;dbl&gt; 0, 3307002, 1930184, 1277933, 1676116, 552925…
+$ 商業                     &lt;dbl&gt; 9311, 0, 3495940, 651679, 2039907, 1826085, 5…
+$ `金融・保険`             &lt;dbl&gt; 0, 0, 1305682, 164048, 245973, 252847, 447894…
+$ 不動産                   &lt;dbl&gt; 81, 0, 138551, 3047681, 219818, 72325, 379852…
+$ 運輸                     &lt;dbl&gt; 1939, 57, 6781393, 505823, 968360, 1665151, 2…
+$ 情報通信                 &lt;dbl&gt; 0, 0, 2746573, 233419, 480158, 714522, 636153…
+$ 公務                     &lt;dbl&gt; 2140, 429, 2878809, 588219, 1265320, 581473, …
+$ サービス                 &lt;dbl&gt; 1307826, 5412, 26036643, 1236893, 5177873, 89…
+$ 分類不明                 &lt;dbl&gt; 0, 1335, 409256, 0, 74708, 67954, 2326986, 13…
+$ 内生部門計               &lt;dbl&gt; 10850956, 16458647, 198750945, 9119713, 18279…
+$ 家計外消費支出           &lt;dbl&gt; 80714, -7052, 3073285, 0, 7876, 1595669, 250,…
+$ 民間消費支出             &lt;dbl&gt; 3482543, -8002, 56810616, 0, 8020817, 4697469…
+$ 一般政府消費支出         &lt;dbl&gt; 0, 0, 334400, 0, 634473, 6873, 0, 37145, -747…
+$ 国内総固定資本形成       &lt;dbl&gt; 197752, -8432, 34700743, 54117611, 0, 1276982…
+$ 在庫純増                 &lt;dbl&gt; 721993, -97649, 1187167, 0, 0, 197402, 0, 0, …
+$ 国内最終需要計           &lt;dbl&gt; 4483002, -121135, 96106211, 54117611, 8663166…
+$ 国内需要計               &lt;dbl&gt; 15333958, 16337512, 294857156, 63237324, 2694…
+$ 輸出計                   &lt;dbl&gt; 62464, 31099, 56248942, 0, 44370, 8620512, 65…
+$ 最終需要計               &lt;dbl&gt; 4545466, -90036, 152355153, 54117611, 8707536…
+$ 需要合計                 &lt;dbl&gt; 15396422, 16368611, 351106098, 63237324, 2698…
+$ `（控除）輸入`           &lt;dbl&gt; -2092569, -14054291, -40724937, 0, -2978, -70…
+$ `（控除）関税`           &lt;dbl&gt; -42648, -36891, -803663, 0, 0, 0, 0, 0, 0, 0,…
+$ `（控除）輸入品商品税`   &lt;dbl&gt; -106630, -1269048, -2506636, 0, 0, 0, 0, 0, 0…
+$ `（控除）輸入計`         &lt;dbl&gt; -2241847, -15360230, -44035236, 0, -2978, -70…
+$ 最終需要部門計           &lt;dbl&gt; 2303619, -15450266, 108319917, 54117611, 8704…
+$ 国内生産額               &lt;dbl&gt; 13154575, 1008381, 307070862, 63237324, 26983…
+$ `国内総生産\n（支出側）` &lt;dbl&gt; 2222905, -15443214, 105246632, 54117611, 8696…
+$ ...34                    &lt;chr&gt; "01", "02", "03", "04", "05", "06", "07", "08…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># データを成形</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>data_new <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(農業 <span class="ot">=</span> 農林水産業,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>         電力等 <span class="ot">=</span> <span class="st">`</span><span class="at">電力・ガス・水道</span><span class="st">`</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>         金融等 <span class="ot">=</span> <span class="st">`</span><span class="at">金融・保険</span><span class="st">`</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>         輸入 <span class="ot">=</span>  <span class="st">`</span><span class="at">（控除）輸入</span><span class="st">`</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>         関税 <span class="ot">=</span> <span class="st">`</span><span class="at">（控除）関税</span><span class="st">`</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>         輸入品税 <span class="ot">=</span> <span class="st">`</span><span class="at">（控除）輸入品商品税</span><span class="st">`</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>         輸入計 <span class="ot">=</span> <span class="st">`</span><span class="at">（控除）輸入計</span><span class="st">`</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>         国内総生産_支出側<span class="ot">=</span> <span class="st">`</span><span class="at">国内総生産</span><span class="sc">\n</span><span class="at">（支出側）</span><span class="st">`</span>       </span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>         ) <span class="sc">|&gt;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>            工業 <span class="ot">=</span> 鉱業 <span class="sc">+</span> 製造業,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>            サービス業 <span class="ot">=</span> 建設 <span class="sc">+</span> 電力等 <span class="sc">+</span> 商業 <span class="sc">+</span> 金融等 <span class="sc">+</span> 不動産 <span class="sc">+</span> 運輸 <span class="sc">+</span> 情報通信 <span class="sc">+</span> 公務 <span class="sc">+</span> サービス <span class="sc">+</span> 分類不明,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>            家計 <span class="ot">=</span> 農業 <span class="sc">+</span> 工業 <span class="sc">+</span> サービス業,</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">.after =</span> 農業</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">|&gt;</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(農業, 工業, サービス業, 家計)) </span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>data_new</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 24 × 4
+      農業      工業 サービス業      家計
+     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;
+ 1 1643017   7798737    1409202  10850956
+ 2     626  12641122    3816899  16458647
+ 3 2563648 132496747   63690550 198750945
+ 4   65697   1204471    7849545   9119713
+ 5  112781   5613119   12553179  18279079
+ 6  543366  17458217   18812557  36814140
+ 7  226281   3914007   25349149  29489437
+ 8    4520    628497    7609620   8242637
+ 9  633183   8680253   23223005  32536441
+10   37206   2496874   24158330  26692410
+# ℹ 14 more rows</code></pre>
+</div>
+</div>
 </section>
 
 </main>

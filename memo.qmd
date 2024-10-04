@@ -1,0 +1,54 @@
+---
+title: "作業メモ"
+date: "2024-10-04"
+execute: 
+  error: true
+  cache: true
+format:
+  html: 
+    slide-level: 2
+    toc: true
+---
+
+# 目的
+作業メモをの存する。
+
+```{r}
+# 2005年の産業連関表から13部門表を読み込み
+library(readxl)
+library(httr)
+library(tidyverse)
+
+url <- "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000014890374&fileKind=0"
+
+# 一時ファイルに保存
+temp_file <- tempfile(fileext = ".xls")
+
+# Excelファイルをダウンロード
+GET(url, write_disk(temp_file))
+
+# Excelファイルを読み込む
+data <- read_excel(temp_file, skip = 2)
+data <- data[-1]
+glimpse(data)
+
+# データを成形
+data_new <- data |>
+  rename(農業 = 農林水産業,
+         電力等 = `電力・ガス・水道`,
+         金融等 = `金融・保険`,
+         輸入 =  `（控除）輸入`,
+         関税 = `（控除）関税`,
+         輸入品税 = `（控除）輸入品商品税`,
+         輸入計 = `（控除）輸入計`,
+         国内総生産_支出側= `国内総生産\n（支出側）`       
+         ) |>
+        mutate(
+            工業 = 鉱業 + 製造業,
+            サービス業 = 建設 + 電力等 + 商業 + 金融等 + 不動産 + 運輸 + 情報通信 + 公務 + サービス + 分類不明,
+            家計 = 農業 + 工業 + サービス業,
+            .after = 農業
+        ) |>
+  select(c(農業, 工業, サービス業, 家計)) 
+data_new
+```
