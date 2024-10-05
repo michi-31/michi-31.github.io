@@ -50,7 +50,7 @@ Rの基本的な使い方を整理します。
 ## 3. Python {#3-python}
 Pythonの基本的な使い方を整理します。  
 
-- [Pythonについて](section1.html)
+- [chapter1. Pythonとは](section1.html)
 
 ## 4. 計量経済学 {#4-計量経済学}
 計量経済学の基本的な知識を整理します。  
